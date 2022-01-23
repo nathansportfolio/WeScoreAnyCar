@@ -85,7 +85,6 @@ const DrawerComponent: React.FC<DrawerComponentProps> = () => {
         anchor={"left"}
         open={drawer}
         onClose={() => toggleDrawer()}
-        color="red"
       >
         <IconButton
           size="large"

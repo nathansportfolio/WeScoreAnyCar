@@ -37,12 +37,12 @@ a {
   overflow-y: scroll;
 }
 
-.css-11b3ww9-MuiPaper-root-MuiAppBar-root {
-  background-color: rgb(0.2, 0.3, 2, 0.4) !important;
-  z-index: inherit;
+.MuiAppBar-positionFixed {
+  background-color: rgb(0.2, 0.3, 2, 0.2) !important;
+  display: sticky;
 }
 
-.css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
+.MuiDrawer-paperAnchorLeft{
   background-color: rgb(0.2, 0.3, 2, 0.6) !important;
 }
 
