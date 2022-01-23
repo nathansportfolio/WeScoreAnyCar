@@ -1,0 +1,241 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "lato", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.inner-page {
+  padding-top: 80px;
+  width: 95%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mountain-background {
+  height: 100vh;
+  width: 100vw;
+  background-image: url("/mountains2.jpeg");
+  background-repeat: no-repeat;
+  position: fixed;
+  z-index: -1;
+  overflow-y: scroll;
+}
+
+.css-11b3ww9-MuiPaper-root-MuiAppBar-root {
+  background-color: rgb(0.2, 0.3, 2, 0.4) !important;
+  z-index: inherit;
+}
+
+.css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
+  background-color: rgb(0.2, 0.3, 2, 0.6) !important;
+}
+
+.css-cveggr-MuiListItemIcon-root {
+  color: white !important;
+}
+
+.css-kzf2d7-MuiInputBase-root-MuiOutlinedInput-root {
+  color: white;
+}
+
+.css-3v5nb6-MuiFormLabel-root-MuiInputLabel-root {
+  color: white;
+}
+
+.css-1lwa3th-MuiFormLabel-root-MuiInputLabel-root {
+  color: white;
+}
+
+.score-gauge {
+  width: 230px;
+  justify-content: center;
+  display: flex;
+}
+
+.score-gauge-header {
+  padding-top: 60px;
+  color: white;
+  position: absolute;
+  font-size: 1em;
+  max-width: 100px;
+  font-weight: 300;
+}
+
+.score-gauge-text {
+  padding-top: 78px;
+  color: white;
+  position: absolute;
+  font-size: 3.5em;
+  max-width: 100px;
+  font-weight: 600;
+}
+
+.score-gauge-subheader {
+  padding-top: 148px;
+  color: white;
+  position: absolute;
+  font-size: 0.8em;
+  max-width: 100px;
+  font-weight: 300;
+}
+
+.score-shelf {
+  height: 450px;
+  background-color: rgb(0.2, 0.3, 2, 0.2) !important;
+  justify-content: center;
+  display: flex;
+}
+
+.ring {
+  transition: 1s ease-in-out;
+}
+
+.scrore-card {
+  height: 205px !important;
+  margin-left: 20px;
+  margin-right: 20px;
+  min-width: 300px;
+  padding-left: 30px;
+  padding-right: 30px;
+  background-color: #ecf0f1;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  text-align: left;
+}
+
+.score-card-container {
+  padding: 15px;
+  overflow-x: scroll;
+  display: flex;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+}
+
+.score-card-container::-webkit-scrollbar {
+  display: none;
+}
+
+.mot-container {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  margin: 20px;
+  padding: 20px;
+  text-align: left;
+}
+
+.line-chart-container {
+  width: 100%;
+  border-radius: 10px;
+  padding-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.mot-entry-container {
+  width: 100%;
+  height: 300px;
+  overflow-x: scroll;
+}
+
+.mot-entry-container::-webkit-scrollbar {
+  display: none;
+}
+
+.mot-entry {
+  width: 95%;
+  height: 70px;
+  background-color: #dfe6e9;
+  margin-top: 10px;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.know-car-container {
+  padding: 20px;
+  text-align: center;
+  color: white;
+  background-color: rgb(0.2, 0.3, 2, 0.2) !important;
+}
+
+.score-headers {
+  text-align: left;
+}
+
+.mileage-score-container {
+  border-radius: 20px;
+  width: 150px;
+  background-color: rgb(0.2, 0.3, 2, 0.2) !important;
+  padding: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.mileage-text {
+  color: white;
+  font-weight: 600;
+  font-size: 2em;
+}
+
+.mileage-sub-text {
+  color: white;
+  font-weight: 400;
+  font-size: 0.7em;
+  text-align: center;
+}
+
+.score-and-mileage-container {
+  width: 300px;
+}
+
+.score-average-car-score {
+  position: relative;
+}
+
+@media only screen and (min-width: 600px) {
+  .inner-page {
+    max-width: 900px;
+  }
+
+  .score-shelf {
+    height: 470px;
+  }
+
+  .score-container-chunk {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .score-headers {
+    text-align: center;
+  }
+
+  .score-card-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  .mot-container {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
