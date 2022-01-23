@@ -7,7 +7,7 @@ import { MainContext } from "../context/context";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
 
-const style = {
+const style:any = {
   inner: {
     display: "flex",
     marginTop: "50px",

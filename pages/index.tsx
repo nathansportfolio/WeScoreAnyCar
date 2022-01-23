@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
 import { MainContext } from "../context/context";
 
-const style = {
+const style:any = {
   inner: {
     display: "inherit",
     marginTop: "50px",
