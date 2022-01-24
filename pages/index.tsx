@@ -56,9 +56,8 @@ const Home: React.FC<HomeProps> = () => {
             <TextField
               id="outlined-basic"
               label="Enter Registration"
-              variant="outlined"
-              color="success"
-              sx={{ color: "white" }}
+              variant="filled"
+              sx={{ backgroundColor: "rgb(0.2, 0.3, 2, 0.6)", borderRadius: '5px' }}
               value={registration}
               onChange={(e) => setRegistration(e.target.value.toUpperCase())}
               helperText={error ? "No MOT Records Found to score" : ""}

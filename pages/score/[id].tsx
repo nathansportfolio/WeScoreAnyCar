@@ -48,6 +48,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString }) => {
     motTests,
     primaryColour,
     firstUsedDate,
+    score,
   } = vehicleString;
 
   useEffect(() => {
@@ -145,7 +146,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString }) => {
             <div className="score-and-mileage-container">
               <ScoreGauge
                 duration={1}
-                percentage={motTests.length * 10}
+                percentage={score}
                 header="Get a score"
                 subHeader="Based on the health of your car"
               />
@@ -196,3 +197,4 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 };
 
 export default Score;
+

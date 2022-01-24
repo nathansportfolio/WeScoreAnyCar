@@ -98,7 +98,7 @@ const DrawerComponent: React.FC<DrawerComponentProps> = () => {
           }}
           onClick={() => toggleDrawer()}
         >
-          <Close />
+          <Close style={{color:'white'}}/>
         </IconButton>
         {list("left")}
       </Drawer>

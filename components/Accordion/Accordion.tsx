@@ -47,15 +47,23 @@ const MotAccordion: React.FC<MotAccordionProps> = ({ mots }) => {
           </div>
         </AccordionSummary>
         <AccordionDetails>
-          <b>{completedDate}</b>
-          <Typography>
-            Advisories Notice(s) - Nearside Rear Coil spring corroded (5.3.1 (b)
-            (i))
+          {(rfrAndComments.length > 0) ? rfrAndComments.map((comment:any) => (
+            <>
+             <Typography>
+               <b>{comment.type}</b><br/>
+               {comment.text}
           </Typography>
-          <Typography>
+          
+            </>
+          )) :   <Typography>
+         <b> A Clean MOT - Nothing to show </b>
+     </Typography>}
+     <div style={{borderTop: 'dashed 1px', paddingTop: '10px'}}>
+     <Typography>
             Mileage: {odometerValue} {odometerUnit}{" "}
           </Typography>
-          <Typography>Mot Test: {motTestNumber}</Typography>
+     <Typography><i>Mot Test: {motTestNumber}</i></Typography>
+</div>
         </AccordionDetails>
       </Accordion>
     );
