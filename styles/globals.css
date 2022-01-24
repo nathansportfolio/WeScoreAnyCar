@@ -71,6 +71,14 @@ a {
 
 }
 
+.footer{
+  width: 100vw;
+  height: 100px;
+  background-color: lightcyan;
+  padding: 20px;
+  text-align: center;
+}
+
 .score-gauge {
   width: 230px;
   justify-content: center;

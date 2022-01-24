@@ -182,6 +182,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString }) => {
           <LoadingButton variant="contained"> Save car</LoadingButton>
         </div>
       </div>
+      <div className="footer"> Footer here</div>
     </div>
   );
 };
