@@ -93,8 +93,7 @@ const DrawerComponent: React.FC<DrawerComponentProps> = () => {
           sx={{
             width: "20px",
             marginLeft: "23px",
-            marginTop: "10px",
-            color: "white",
+            marginTop: "10px"
           }}
           onClick={() => toggleDrawer()}
         >
