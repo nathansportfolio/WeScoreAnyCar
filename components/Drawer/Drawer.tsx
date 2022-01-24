@@ -48,7 +48,7 @@ const DrawerComponent: React.FC<DrawerComponentProps> = () => {
       >
         <ListItem button key={text}>
           <ListItemIcon>
-            <Icon />
+            <Icon sx={{color: 'white'}} />
           </ListItemIcon>
           <ListItemText primary={text} />
         </ListItem>
@@ -93,11 +93,12 @@ const DrawerComponent: React.FC<DrawerComponentProps> = () => {
           sx={{
             width: "20px",
             marginLeft: "23px",
-            marginTop: "10px"
+            marginTop: "10px",
+            color: 'white'
           }}
           onClick={() => toggleDrawer()}
         >
-          <Close sx={{ color: 'white' }}/>
+          <Close/>
         </IconButton >
         {list("left")}
       </Drawer>
