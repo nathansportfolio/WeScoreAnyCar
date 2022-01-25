@@ -2,11 +2,9 @@ import VehicleModel from "./vehicle";
 
 export const getVehicle = async () => {
 try {
-    vehicle = await VehicleModel.findOne({
-        make: 'audi',
-    }).populate("vehicle", [
-      "model"
-    ]);
+    return VehicleModel.findOne({}, function(err, vehicle) {
+      console.log('vehicle')
+    })
 
   console.log('f', vehicle)
   } catch (err) {

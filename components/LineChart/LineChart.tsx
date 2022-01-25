@@ -16,11 +16,10 @@ const LineCharts: React.FC<LineChartsProps> = ({ mots }) => {
   const [mobile, setMobile] = useState(false);
   //TODO - Count advisories per mot and transform data for dates
   const data = mots
-    .filter((mot: any) => mot.testResult.toLowerCase() === "passed")
     .map((mot: any) => ({
       name: mot.completedDate.split(".")[0],
-      score: mot.rfrAndComments.length,
-      average: mot.rfrAndComments.length + 1,
+      'Your Score': mot.rfrAndComments.length,
+      'Average Score': Math.floor(Math.random() * 7),
       amt: 2,
     }));
 
@@ -49,12 +48,12 @@ const LineCharts: React.FC<LineChartsProps> = ({ mots }) => {
 
       <Line
         type="monotone"
-        dataKey="average"
-        stroke="#e74c3c"
+        dataKey='Average Score'
+        stroke="blue"
         strokeWidth={3}
         activeDot={{ r: 8 }}
       />
-      <Line type="monotone" dataKey="score" stroke="#2ecc71" strokeWidth={3} />
+      <Line type="monotone" dataKey="Your Score" stroke="green" strokeWidth={3} />
     </Chart>
   );
 };

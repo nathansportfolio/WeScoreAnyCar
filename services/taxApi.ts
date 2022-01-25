@@ -12,8 +12,13 @@ const HEADERS = {
 
 export const taxApi = async (registrationNumber:string) => {
 
+try{
     const { data } = await axios.post(ADDRESS, {registrationNumber}, HEADERS);
-
     return data
+}catch(err){
+
+}
+
+
 }
 
