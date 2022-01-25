@@ -8,6 +8,8 @@ import { MotApiCall } from "../../services/motCalls";
 import { useRouter } from "next/router";
 import { useEffect, useContext } from "react";
 import { MainContext } from "../../context/context";
+import { getVehicle} from '../../services/fetchCars'
+import {taxApi} from '../../services/taxApi'
 
 const style = {
   card: { display: "flex", justifyContent: "space-between", height: "30px" },
@@ -49,6 +51,12 @@ const Score: React.FC<ScoreProps> = ({ vehicleString }) => {
     primaryColour,
     firstUsedDate,
     score,
+    taxStatus,
+    taxDueDate,
+    revenueWeight,
+    wheelplan,
+    dateOfLastV5CIssued,
+    co2Emissions
   } = vehicleString;
 
   useEffect(() => {
@@ -93,12 +101,12 @@ const Score: React.FC<ScoreProps> = ({ vehicleString }) => {
     return (
       <div className="scrore-card">
         <div style={style.card}>
-          <h3>Taxed:</h3>
-          <h3>yes</h3>
+          <h3>Taxed Status:</h3>
+          <h3>{taxStatus}</h3>
         </div>
         <div style={style.card}>
-          <h3>Tax Due:</h3>
-          <h3>01/02/2022</h3>
+          <h3>Tax Due Date:</h3>
+          <h3>{taxDueDate}</h3>
         </div>
         <div style={style.card}>
           <h3>Tax Amount:</h3>
@@ -115,24 +123,24 @@ const Score: React.FC<ScoreProps> = ({ vehicleString }) => {
     return (
       <div className="scrore-card">
         <div style={style.card}>
-          <h3>Make:</h3>
-          <h3>{make}</h3>
+          <h3>Weight:</h3>
+          <h3>{revenueWeight}kg</h3>
         </div>
         <div style={style.card}>
-          <h3>Model:</h3>
-          <h3>{model}</h3>
+          <h3>Wheel Plan:</h3>
+          <h3>{wheelplan}</h3>
         </div>
         <div style={style.card}>
-          <h3>Fuel:</h3>
-          <h3>{fuelType}</h3>
+          <h3>Last V5 Produced:</h3>
+          <h3>{dateOfLastV5CIssued}</h3>
         </div>
         <div style={style.card}>
-          <h3>Colour:</h3>
-          <h3>{primaryColour}</h3>
+          <h3>co2 Emissions:</h3>
+          <h3>{co2Emissions}</h3>
         </div>
         <div style={style.card}>
-          <h3>Engine:</h3>
-          <h3>{engineSize}cc</h3>
+          <h3>Tax Price (P/Y):</h3>
+          <h3>£999</h3>
         </div>
       </div>
     );
@@ -191,7 +199,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   if (params) {
     if (params.id) {
       const response = await MotApiCall(params.id.toString());
-      return { props: { vehicleString: response } };
+      const responseTax = await taxApi(params.id.toString())
+      const fullResponse = {...response, ...responseTax}
+      return { props: { vehicleString: fullResponse } };
     }
   }
   throw new Error("Required parameters not provided");
