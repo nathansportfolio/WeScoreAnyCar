@@ -41,7 +41,7 @@ const NavigationBar: React.FC<NavigationBarProps> = () => {
                 textAlign: "center",
               }}
             >
-              <Link href="/" style={{ color: "white", textDecoration: "none" }}>
+              <Link href="/" style={{ color: "white", textDecoration: "none", fontWeight: '700' }}>
                 WeScoreAnyCar.com{" "}
               </Link>
             </Typography>

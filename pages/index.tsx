@@ -5,8 +5,9 @@ import ScoreGauge from "../components/ScoreGauge";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
 import { MainContext } from "../context/context";
+import Spinner from "../components/Spinner";
 
-const style:any = {
+const style: any = {
   inner: {
     display: "inherit",
     marginTop: "50px",
@@ -23,17 +24,19 @@ const style:any = {
 interface HomeProps {}
 
 const Home: React.FC<HomeProps> = () => {
-  const { setError, error } = useContext(MainContext);
+  const { setError, error, setLoading, loading } = useContext(MainContext);
   const router = useRouter();
   const [registration, setRegistration] = useState("");
 
   const HandleSubmit = async () => {
     setError(false);
+    setLoading(true);
     router.push(`/score/${registration}`);
   };
 
   return (
     <div className="mountain-background">
+      {loading && <Spinner />}
       <div className="page-container">
         <div className="inner-page" style={style.inner}>
           <ScoreGauge
@@ -42,6 +45,7 @@ const Home: React.FC<HomeProps> = () => {
             header="Get a score"
             subHeader="Based on the health of your car"
             noDelay={true}
+            average={56}
           />
           <h3
             style={{
@@ -57,7 +61,10 @@ const Home: React.FC<HomeProps> = () => {
               id="outlined-basic"
               label="Enter Registration"
               variant="filled"
-              sx={{ backgroundColor: "rgb(0.2, 0.3, 2, 0.6)", borderRadius: '5px' }}
+              sx={{
+                backgroundColor: "rgb(0.2, 0.3, 2, 0.6)",
+                borderRadius: "5px",
+              }}
               value={registration}
               onChange={(e) => setRegistration(e.target.value.toUpperCase())}
               helperText={error ? "No MOT Records Found to score" : ""}

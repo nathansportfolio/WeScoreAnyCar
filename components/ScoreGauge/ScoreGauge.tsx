@@ -41,7 +41,8 @@ interface ScoreGaugeProps {
   duration: number;
   header: string;
   subHeader: string;
-  noDelay?: boolean
+  noDelay?: boolean;
+  average: any
 }
 
 const ScoreGauge: React.FC<ScoreGaugeProps> = ({
@@ -49,20 +50,26 @@ const ScoreGauge: React.FC<ScoreGaugeProps> = ({
   duration,
   header,
   subHeader,
-  noDelay
+  noDelay,
+  average
 }) => {
   const circ = 2 * Math.PI * 100;
+  const circTwo = 2 * Math.PI * 95;
   const [Percent, setPercent] = useState(1);
+  const [PercentTwo, setPercentTwo] = useState(1);
 
   useEffect(() => {
     setTimeout(() => {
       setPercent(cleanPercentage(percentage));
+      setPercentTwo(cleanPercentage(average));
     }, 10);
   }, []);
 
   const colour = getValues(Percent);
   const strokePct = ((100 - Percent) * circ) / 100;
 
+  const strokePctSecond = ((100 - PercentTwo) * circTwo) / 100;
+  const positive = ((Percent - PercentTwo)*10) > 0
   return (
     <div style={{ justifyContent: "center", display: "flex" }}>
       {header && (
@@ -83,17 +90,45 @@ const ScoreGauge: React.FC<ScoreGaugeProps> = ({
                   strokeDashoffset: strokePct,
                 }}
               ></circle>
+              </g>
+              <g transform={`rotate(-90 ${"113 95"})`}>
+              <circle
+                r={95}
+                cx={95}
+                cy={95}
+                fill="rgba(0, 0, 0, 0.274)"
+                strokeLinecap="round"
+                style={{
+                  stroke: 'white',
+                  transition: noDelay ? "" : "all 1.5s",
+                  strokeWidth: "0.2rem",
+                  strokeDasharray: circTwo,
+                  strokeDashoffset: strokePctSecond,
+                }}
+              ></circle>
             </g>
           </svg>
           <div className="score-gauge-header">{header || header}</div>
-          <div className="score-gauge-text">
-            <CountUp
+          <div className="score-gauge-text" style={{color: colour.colour}}>
+           <div style={{display: 'flex', fontWeight: '400'}}> <CountUp
               start={0}
               end={Percent * 10}
               duration={duration || 0.001}
               decimals={0}
+            /><div style={{fontSize: '12px', color: positive ? 'green' : 'red', marginLeft: '-5px', fontWeight: '300'}}>
+              { positive && '+'}{((Percent - PercentTwo)*10).toFixed(0)}</div></div>
+            {!subHeader && <div style={{fontSize: '12px', color: 'white', textAlign: 'center', fontWeight: '300'}}>
+              Average Score{" "}<br/>
+            <CountUp
+              start={0}
+              end={PercentTwo * 10}
+              duration={duration || 0.001}
+              decimals={0}
             />
+            </div>}
+
           </div>
+          
           <div
             className="score-gauge-subheader"
             style={{ textAlign: "center" }}

@@ -34,7 +34,8 @@ const Site: React.FC<SiteProps> = ({ content }) => {
       ></Script>
       <NavigationBar />
       <div style={{}}>
-      <main>{content}</main></div>
+        <main>{content}</main>
+      </div>
     </div>
   );
 };

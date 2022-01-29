@@ -14,11 +14,10 @@ const HEADERS = {
 export const MotApiCall = async (registration: string) => {
   try {
     const { data } = await axios.get(MOT_API_ADDRESS + registration, HEADERS);
-    const vehicle = data[0]
-    const score = getScores(vehicle);
+    const vehicle = data[0];
+    const veh = getScores(vehicle);
 
-    console.log('s', 100-score)
-    return {...vehicle, score: 100-score};
+    return veh;
   } catch (err) {
     console.log("error", err);
     return {
@@ -35,35 +34,55 @@ export const MotApiCall = async (registration: string) => {
   }
 };
 
-const getScores = (vehicle:any) => {
+export const getScores = (vehicle: any) => {
   let score = 0;
-    vehicle.motTests.map((mot:any) => {
+  const motTests = vehicle.motTests.map((mot: any) => {
     let advisories = 0;
-    let dangerous = 0; 
+    let dangerous = 0;
     let fail = 0;
     let major = 0;
     let minor = 0;
     let user = 0;
 
-    mot.rfrAndComments.map((comment:any) => {
-      if(comment.type.toLowerCase() === 'advisory') advisories++
-      if(comment.type.toLowerCase() === 'fail') fail++
-      if(comment.type.toLowerCase() === 'major') major++
-      if(comment.type.toLowerCase() === 'minor') minor++
-      if(comment.type.toLowerCase() === 'user entered') user++
-      if(comment.type.toLowerCase() === 'dangerous') dangerous++
-      else if(comment.dangerous) dangerous++
-     
-    })
+    mot.rfrAndComments.map((comment: any) => {
+      if (comment.type.toLowerCase() === "advisory") advisories++;
+      if (comment.type.toLowerCase() === "fail") fail++;
+      if (comment.type.toLowerCase() === "major") major++;
+      if (comment.type.toLowerCase() === "minor") minor++;
+      if (comment.type.toLowerCase() === "user entered") user++;
+      if (comment.type.toLowerCase() === "dangerous") dangerous++;
+      else if (comment.dangerous) dangerous++;
+    });
 
-    const newScore = calculateScore(advisories, fail, dangerous, major, minor, user,)  
-    score += newScore
-  })
-  const currentYear = new Date().getFullYear()
-  const age = currentYear - vehicle.firstUsedDate.split('.')[0]
-    return parseFloat((score/age).toFixed(2))*20
-}
+    const newScore = calculateScore(
+      advisories,
+      fail,
+      dangerous,
+      major,
+      minor,
+      user
+    );
+    score += newScore;
+    return { ...mot, score: newScore };
+  });
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - vehicle.firstUsedDate.split(".")[0];
+  return {
+    ...vehicle,
+    motTests,
+    score: parseFloat((score / age).toFixed(2)),
+  };
+};
 
-const calculateScore = (advisories:number, fail:number, dangerous:number, major:number, minor:number, user:number) => {
-    return((advisories*0.5) + minor + (major*1.5) + (dangerous*3) + user + (fail*2))
-}
+const calculateScore = (
+  advisories: number,
+  fail: number,
+  dangerous: number,
+  major: number,
+  minor: number,
+  user: number
+) => {
+  return (
+    advisories * 0.5 + minor + major * 1.5 + dangerous * 3 + user + fail * 2
+  );
+};

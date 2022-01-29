@@ -48,7 +48,7 @@ const DrawerComponent: React.FC<DrawerComponentProps> = () => {
       >
         <ListItem button key={text}>
           <ListItemIcon>
-            <Icon sx={{color: 'white'}} />
+            <Icon sx={{ color: "white" }} />
           </ListItemIcon>
           <ListItemText primary={text} />
         </ListItem>
@@ -81,11 +81,7 @@ const DrawerComponent: React.FC<DrawerComponentProps> = () => {
 
   return (
     <div>
-      <Drawer
-        anchor={"left"}
-        open={drawer}
-        onClose={() => toggleDrawer()}
-      >
+      <Drawer anchor={"left"} open={drawer} onClose={() => toggleDrawer()}>
         <IconButton
           size="large"
           edge="start"
@@ -94,12 +90,12 @@ const DrawerComponent: React.FC<DrawerComponentProps> = () => {
             width: "20px",
             marginLeft: "23px",
             marginTop: "10px",
-            color: 'white'
+            color: "white",
           }}
           onClick={() => toggleDrawer()}
         >
-          <Close/>
-        </IconButton >
+          <Close />
+        </IconButton>
         {list("left")}
       </Drawer>
     </div>
