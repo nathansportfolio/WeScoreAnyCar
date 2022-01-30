@@ -41,11 +41,11 @@ const Home: React.FC<HomeProps> = () => {
         <div className="inner-page" style={style.inner}>
           <ScoreGauge
             duration={0}
-            percentage={88}
+            percentage={0}
             header="Get a score"
             subHeader="Based on the health of your car"
             noDelay={true}
-            average={56}
+            average={0.3}
           />
           <h3
             style={{

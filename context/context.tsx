@@ -12,7 +12,7 @@ interface MainContextType {
   toggleDrawer: Function;
   setError: Function;
   error: boolean;
-  setLoading: Function
+  setLoading: Function;
 }
 
 interface MainContextProps {}
@@ -64,7 +64,7 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
         drawer,
         loading,
         error,
-        setLoading: (value:boolean) => setLoading(value),
+        setLoading: (value: boolean) => setLoading(value),
         setError: (value: boolean) => setError(value),
         toggleDrawer: () => setDrawer(!drawer),
         getScore,

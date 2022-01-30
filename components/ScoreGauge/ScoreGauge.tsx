@@ -7,30 +7,56 @@ const cleanPercentage = (percentage: number) => {
   return tooLow ? 0 : tooHigh ? 100 : +percentage;
 };
 
+const scoreMaker = (percentage: number) => {
+  switch (true) {
+    case percentage < 0.3:
+      return (100 - percentage * 30)-0.1;
+    case percentage < 0.6:
+      return 100 - percentage * 35;
+    case percentage < 0.9:
+      return 100 - percentage * 35;
+    case percentage < 1.3:
+      return 100 - percentage * 35;
+    case percentage < 1.6:
+      return 55 - percentage * 2;
+    case percentage < 1.9:
+      return 55 - percentage * 3;
+    case percentage < 2.4:
+      return 55 - percentage * 5;
+    case percentage < 3.2:
+      return 55 - percentage * 7;
+    case percentage < 4:
+      return 55 - percentage * 4;
+    case percentage >= 4 && percentage <= 6:
+      return 30 - percentage;
+    case percentage > 6 && percentage <= 10:
+      return 26 - percentage;
+    case percentage > 10:
+      return 0.4;
+    default:
+      return percentage;
+  }
+};
+
 const getValues = (percent: number) => {
   const score = percent * 10;
   switch (true) {
     case score < 438:
       return { header: "Poor", colour: "#e67e22" };
-      break;
     case score >= 438 && score < 530:
       return { header: "Fair", colour: "#f1c40f" };
-      break;
     case score >= 530 && score < 670:
       return { header: "Good", colour: "#7bed9f" };
-      break;
     case score >= 670 && score < 810:
       return {
         header: "Very Good",
         colour: "#2ecc71",
       };
-      break;
     case score > 810:
       return {
         header: "Excellent",
         colour: "#27ae60",
       };
-      break;
     default:
       return { colour: "#27ae60", header: "None" };
   }
@@ -42,7 +68,8 @@ interface ScoreGaugeProps {
   header: string;
   subHeader: string;
   noDelay?: boolean;
-  average: any
+  average: any;
+  car?: string;
 }
 
 const ScoreGauge: React.FC<ScoreGaugeProps> = ({
@@ -51,7 +78,8 @@ const ScoreGauge: React.FC<ScoreGaugeProps> = ({
   header,
   subHeader,
   noDelay,
-  average
+  average,
+  car,
 }) => {
   const circ = 2 * Math.PI * 100;
   const circTwo = 2 * Math.PI * 95;
@@ -60,8 +88,8 @@ const ScoreGauge: React.FC<ScoreGaugeProps> = ({
 
   useEffect(() => {
     setTimeout(() => {
-      setPercent(cleanPercentage(percentage));
-      setPercentTwo(cleanPercentage(average));
+      setPercent(scoreMaker(cleanPercentage(percentage)));
+      setPercentTwo(scoreMaker(cleanPercentage(average)));
     }, 10);
   }, []);
 
@@ -69,7 +97,7 @@ const ScoreGauge: React.FC<ScoreGaugeProps> = ({
   const strokePct = ((100 - Percent) * circ) / 100;
 
   const strokePctSecond = ((100 - PercentTwo) * circTwo) / 100;
-  const positive = ((Percent - PercentTwo)*10) > 0
+  const positive = (Percent - PercentTwo) * 10 > 0;
   return (
     <div style={{ justifyContent: "center", display: "flex" }}>
       {header && (
@@ -90,8 +118,8 @@ const ScoreGauge: React.FC<ScoreGaugeProps> = ({
                   strokeDashoffset: strokePct,
                 }}
               ></circle>
-              </g>
-              <g transform={`rotate(-90 ${"113 95"})`}>
+            </g>
+            <g transform={`rotate(-90 ${"113 95"})`}>
               <circle
                 r={95}
                 cx={95}
@@ -99,7 +127,7 @@ const ScoreGauge: React.FC<ScoreGaugeProps> = ({
                 fill="rgba(0, 0, 0, 0.274)"
                 strokeLinecap="round"
                 style={{
-                  stroke: 'white',
+                  stroke: "white",
                   transition: noDelay ? "" : "all 1.5s",
                   strokeWidth: "0.2rem",
                   strokeDasharray: circTwo,
@@ -109,26 +137,58 @@ const ScoreGauge: React.FC<ScoreGaugeProps> = ({
             </g>
           </svg>
           <div className="score-gauge-header">{header || header}</div>
-          <div className="score-gauge-text" style={{color: colour.colour}}>
-           <div style={{display: 'flex', fontWeight: '400'}}> <CountUp
-              start={0}
-              end={Percent * 10}
-              duration={duration || 0.001}
-              decimals={0}
-            /><div style={{fontSize: '12px', color: positive ? 'green' : 'red', marginLeft: '-5px', fontWeight: '300'}}>
-              { positive && '+'}{((Percent - PercentTwo)*10).toFixed(0)}</div></div>
-            {!subHeader && <div style={{fontSize: '12px', color: 'white', textAlign: 'center', fontWeight: '300'}}>
-              Average Score{" "}<br/>
-            <CountUp
-              start={0}
-              end={PercentTwo * 10}
-              duration={duration || 0.001}
-              decimals={0}
-            />
-            </div>}
-
+          <div className="score-gauge-text" style={{ color: colour.colour }}>
+            <div style={{ display: "flex", fontWeight: "400" }}>
+              {" "}
+              <CountUp
+                start={0}
+                end={Percent * 10}
+                duration={duration || 0.001}
+                decimals={0}
+              />
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: positive ? "green" : "red",
+                  marginLeft: "-5px",
+                  fontWeight: "300",
+                }}
+              >
+                {positive && "+"}
+                {((Percent - PercentTwo) * 10).toFixed(0)}
+              </div>
+            </div>
+            <p
+              style={{
+                fontSize: "14px",
+                textAlign: "center",
+                fontWeight: "300",
+                marginTop: 0,
+                marginBottom: "4px",
+              }}
+            >
+              {colour.header}
+            </p>
+            {!subHeader && (
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "white",
+                  textAlign: "center",
+                  fontWeight: "300",
+                }}
+              >
+                {car && car} Average Score <br />
+                <CountUp
+                  start={0}
+                  end={PercentTwo * 10}
+                  duration={duration || 0.001}
+                  decimals={0}
+                />
+              </div>
+            )}
           </div>
-          
+
           <div
             className="score-gauge-subheader"
             style={{ textAlign: "center" }}

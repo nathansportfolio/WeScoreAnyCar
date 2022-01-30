@@ -111,7 +111,7 @@ a {
 }
 
 .score-gauge-text {
-  padding-top: 80px;
+  padding-top: 65px;
   color: white;
   position: absolute;
   font-size: 3.5em;
@@ -149,7 +149,7 @@ h3 {
   margin-right: 10px;
   min-width: 340px;
   max-width: 340px;
-  background-color: rgb(0.2, 0.3, 2, 0.5) !important;
+  background-color: rgb(0.2, 0.3, 2, 0.6) !important;
   border-radius: 5px;
   padding-bottom: 20px;
   box-shadow: rgba(0, 0, 0, 1) 0px 5px 15px;
@@ -161,7 +161,7 @@ h3 {
   padding-bottom: 20px;
   overflow-x: scroll;
   display: flex;
-  -ms-overflow-style: none; 
+  -ms-overflow-style: none;
   scrollbar-width: none;
 }
 

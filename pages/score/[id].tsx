@@ -104,7 +104,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
 
   useEffect(() => {
     if (!registration) {
-      setLoading(false)
+      setLoading(false);
       setError(true);
       router.push("/");
     }
@@ -138,7 +138,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
           }}
         >
           <div>
-            {properties.firstCol.map((details:any) => (
+            {properties.firstCol.map((details: any) => (
               <div style={style.card}>
                 <h3>{details.title}</h3>
                 <h3>{details.value}</h3>
@@ -147,7 +147,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
           </div>
 
           <div>
-            {properties.secondCol.map((details:any) => (
+            {properties.secondCol.map((details: any) => (
               <div style={style.card}>
                 <h3>{details.title}</h3>
                 <h3>{details.value}</h3>
@@ -168,8 +168,8 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
               <div className="gauges">
                 <ScoreGauge
                   duration={1}
-                  average={avgScore * 30}
-                  percentage={score * 30}
+                  average={avgScore}
+                  percentage={score}
                   header="Your score"
                   subHeader=""
                 />
@@ -180,12 +180,15 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
         </div>
         <div className="score-container-chunk">
           <h2 className="score-headers" style={style.header}>
-           {make}{' '} {model}{' '} <div style={{display: 'inline-block', fontWeight: '300'}}>{registration}</div>
+            {make} {model}{" "}
+            <div style={{ display: "inline-block", fontWeight: "300" }}>
+              {registration}
+            </div>
           </h2>
           <div className="score-card-container">
             {CarDetailsCard(firstCard)}
             {CarDetailsCard(secondCard)}
-            {CarDetailsCard(thirdCard)}            
+            {CarDetailsCard(thirdCard)}
           </div>
         </div>
         <h2 className="score-headers" style={style.header}>
@@ -247,7 +250,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       let score = 0;
 
       const collectMots = fullResponse.motTests
-        .map((mot:any, index:number) => {
+        .map((mot: any, index: number) => {
           const currentYear = mot.completedDate.split(".")[0];
           let nextYear;
           if (fullResponse.motTests[index + 1]) {
@@ -263,17 +266,17 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
             return { ...mot, score, completedDate: currentYear };
           }
         })
-        .filter((mot:any) => mot !== false);
+        .filter((mot: any) => mot !== false);
 
-      const motsWeWant = collectMots.map((mot:any) => mot.completedDate);
+      const motsWeWant = collectMots.map((mot: any) => mot.completedDate);
 
-      const collection = motsWeWant.map((year:any) => {
-        const collectedMotsOneYear = collectedVehicles.map((car:any) => ({
+      const collection = motsWeWant.map((year: any) => {
+        const collectedMotsOneYear = collectedVehicles.map((car: any) => ({
           ...car,
-          mots: car.mots.filter((mot:any) => mot.completedDate === year),
+          mots: car.mots.filter((mot: any) => mot.completedDate === year),
         }));
         let sumOfMotScores = 0;
-        collectedMotsOneYear.forEach((car:any) => {
+        collectedMotsOneYear.forEach((car: any) => {
           if (car.mots[0]) sumOfMotScores += car.mots[0].score;
         });
         return {
@@ -285,7 +288,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       });
 
       let avgScore = 0;
-      collection.map((mot:any) => (avgScore += mot.score));
+      collection.map((mot: any) => (avgScore += mot.score));
 
       return {
         props: {
