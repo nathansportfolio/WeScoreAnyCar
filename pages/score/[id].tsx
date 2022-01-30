@@ -126,7 +126,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
             boxShadow: "rgba(0, 0, 0, 1) 0px 5px 15px",
           }}
         >
-          <div style={{ padding: "21px" }}>
+          <div style={{ padding: "26px" }}>
             <span className={`${properties.icon} fa-4x`}></span>
           </div>
         </div>
