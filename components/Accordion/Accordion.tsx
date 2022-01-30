@@ -3,6 +3,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Typography from "@mui/material/Typography";
+import moment from 'moment'
 
 interface MotAccordionProps {
   mots: any;
@@ -36,7 +37,7 @@ const MotAccordion: React.FC<MotAccordionProps> = ({ mots }) => {
               justifyContent: "space-between",
             }}
           >
-            <Typography>{completedDate} </Typography>{" "}
+            <Typography>{moment(completedDate.split(' ')[0]).format('DD-MM-YYYY')} </Typography>{" "}
             <Typography
               style={{
                 color: testResult.toLowerCase() === "passed" ? "green" : "red",

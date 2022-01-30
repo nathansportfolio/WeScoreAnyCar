@@ -52,6 +52,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
     motTests,
     primaryColour,
     firstUsedDate,
+    motChartTests,
     score,
     taxStatus,
     taxDueDate,
@@ -130,18 +131,17 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
           </div>
         </div>
         <div
+        className="flex space-between"
           style={{
             paddingLeft: "30px",
             paddingRight: "30px",
-            display: "flex",
-            justifyContent: "space-between",
           }}
         >
           <div>
             {properties.firstCol.map((details: any) => (
               <div style={style.card}>
                 <h3>{details.title}</h3>
-                <h3>{details.value}</h3>
+                <h3 className="text-light">{details.value}</h3>
               </div>
             ))}
           </div>
@@ -150,7 +150,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
             {properties.secondCol.map((details: any) => (
               <div style={style.card}>
                 <h3>{details.title}</h3>
-                <h3>{details.value}</h3>
+                <h3 className="text-light">{details.value}</h3>
               </div>
             ))}
           </div>
@@ -181,7 +181,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
         <div className="score-container-chunk">
           <h2 className="score-headers" style={style.header}>
             {make} {model}{" "}
-            <div style={{ display: "inline-block", fontWeight: "300" }}>
+            <div className="inline-block text-light">
               {registration}
             </div>
           </h2>
@@ -196,21 +196,20 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
           How is your car doing?{" "}
         </h2>
         <div className="mot-container">
-          <h3 style={{ textAlign: "center" }}>MOT issues count</h3>
+          {motTests.length > 1 &&(<><h3 className="text-centered">MOT issues count</h3>
           <div className="line-chart-container">
-            <LineChart mots={motTests} averageMots={averageMots} />
+            <LineChart mots={motChartTests} averageMots={averageMots} />
           </div>
           <div
+          className="flex space-between"
             style={{
-              display: "flex",
-              justifyContent: "space-between",
               padding: "10px",
             }}
           >
             <p style={{ color: "green" }}> -Your Score-</p>{" "}
             <p style={{ color: "blue" }}>-Average Score-</p>
           </div>
-
+          </>)}
           <h2>Your MOT History</h2>
           <div className="mot-entry-container">
             <MotAccordion mots={motTests} />
@@ -292,7 +291,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
       return {
         props: {
-          vehicleString: { ...fullResponse, motTests: collectMots },
+          vehicleString: { ...fullResponse, motChartTests: collectMots },
           averageVehicle: {
             averageMots: collection,
             avgScore: parseFloat((avgScore / collection.length).toFixed(2)),

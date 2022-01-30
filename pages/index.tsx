@@ -12,7 +12,6 @@ const style: any = {
     display: "inherit",
     marginTop: "50px",
   },
-  h3: { color: "white" },
   button: {
     backgroundColor: "white",
     color: "black",
@@ -48,15 +47,14 @@ const Home: React.FC<HomeProps> = () => {
             average={0.3}
           />
           <h3
+          className="text-white text-centered"
             style={{
-              color: "white",
-              textAlign: "center",
               marginBottom: "100px",
             }}
           >
             It's like a credit score...<br></br> but for your car
           </h3>
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ display: "flex", justifyContent: "center" }} >
             <TextField
               id="outlined-basic"
               label="Enter Registration"
