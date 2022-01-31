@@ -54,7 +54,7 @@ export const getScores = (vehicle: any) => {
       else if (comment.dangerous) dangerous++;
     });
 
-    const newScore = calculateScore(
+    const motScore = calculateScore(
       advisories,
       fail,
       dangerous,
@@ -62,8 +62,9 @@ export const getScores = (vehicle: any) => {
       minor,
       user
     );
-    score += newScore;
-    return { ...mot, score: newScore };
+    score += motScore;
+
+    return { ...mot, motScore };
   });
   const currentYear = new Date().getFullYear();
   const age = currentYear - vehicle.firstUsedDate.split(".")[0];
