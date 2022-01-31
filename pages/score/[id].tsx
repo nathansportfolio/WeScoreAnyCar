@@ -62,7 +62,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
     co2Emissions,
   } = vehicleString;
 
-  const { averageMots, avgScore } = averageVehicle;
+  const { averageMots, avgScore, avgScrapped } = averageVehicle;
 
   const firstCard = {
     icon: "fas fa-car",
@@ -174,7 +174,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
                   subHeader=""
                 />
               </div>
-              <MileageScore />
+              <MileageScore mileage={avgScrapped}/>
             </div>
           </div>
         </div>
@@ -240,11 +240,19 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         .collection("vehicles")
         .find({ make: response.make, model: response.model })
         .toArray();
-
+      
       const collectedVehicles = vehicles.map((vehicle: any) => ({
         ...vehicle,
         mots: JSON.parse(vehicle.mots).filter((mot: any) => mot !== false),
       }));
+
+      const scrappedTotal: any[] = []
+      collectedVehicles.map((vehicle:any) => {
+        if(vehicle.scrapped) scrappedTotal.push(vehicle.scrapped)
+      })
+      let scrappedTotalNum = 0;
+      scrappedTotal.map((number) => {scrappedTotalNum += number})
+      const completeScrappedValue = scrappedTotalNum/scrappedTotal.length
 
       let score = 0;
 
@@ -266,7 +274,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
           }
         })
         .filter((mot: any) => mot !== false);
-
+      
       const motsWeWant = collectMots.map((mot: any) => mot.completedDate);
 
       const collection = motsWeWant.map((year: any) => {
@@ -283,6 +291,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
           score: parseFloat(
             (sumOfMotScores / collectedMotsOneYear.length).toFixed(2)
           ),
+          scrappedAverage: completeScrappedValue.toFixed(0)
         };
       });
 
@@ -295,6 +304,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
           averageVehicle: {
             averageMots: collection,
             avgScore: parseFloat((avgScore / collection.length).toFixed(2)),
+            avgScrapped: collection[0].scrappedAverage
           },
         },
       };

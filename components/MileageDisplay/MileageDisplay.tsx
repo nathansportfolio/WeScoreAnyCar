@@ -1,15 +1,19 @@
-interface MileageDisplayProps {}
+interface MileageDisplayProps {
+  mileage: number
+}
 
-const MileageDisplay: React.FC<MileageDisplayProps> = () => {
+const MileageDisplay: React.FC<MileageDisplayProps> = ({mileage}) => {
+
+  function numberWithCommas(x:number) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
   return (
     <div>
       <div className="mileage-score-container">
-        <div className="mileage-text">000,000</div>
+        <div className="mileage-text">{numberWithCommas(mileage)}mi</div>
       </div>
       <p className="mileage-sub-text">Average Life Expectancy</p>
-      <p className="mileage-sub-text" style={{ color: "red" }}>
-        COMING SOON...
-      </p>
     </div>
   );
 };
