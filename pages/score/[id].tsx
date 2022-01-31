@@ -238,7 +238,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
       const vehicles = await db
         .collection("vehicles")
-        .find({ make: response.make, model: response.model })
+        .find({ make: response.make, model: response.model, fuelType: response.fuelType })
         .toArray();
       
       const collectedVehicles = vehicles.map((vehicle: any) => ({
