@@ -43,6 +43,7 @@ export const getScores = (vehicle: any) => {
     let major = 0;
     let minor = 0;
     let user = 0;
+    let prs = 0;
 
     mot.rfrAndComments.map((comment: any) => {
       if (comment.type.toLowerCase() === "advisory") advisories++;
@@ -50,6 +51,7 @@ export const getScores = (vehicle: any) => {
       if (comment.type.toLowerCase() === "major") major++;
       if (comment.type.toLowerCase() === "minor") minor++;
       if (comment.type.toLowerCase() === "user entered") user++;
+      if (comment.type.toLowerCase() === "prs") prs++;
       if (comment.type.toLowerCase() === "dangerous") dangerous++;
       else if (comment.dangerous) dangerous++;
     });
@@ -60,7 +62,8 @@ export const getScores = (vehicle: any) => {
       dangerous,
       major,
       minor,
-      user
+      user,
+      prs
     );
     score += motScore;
 
@@ -81,9 +84,10 @@ const calculateScore = (
   dangerous: number,
   major: number,
   minor: number,
-  user: number
+  user: number,
+  prs: number
 ) => {
   return (
-    advisories * 0.5 + minor + major * 1.5 + dangerous * 3 + user + fail * 2
+    advisories * 0.5 + minor + major * 1.5 + dangerous * 3 + user + fail * 2 + prs
   );
 };

@@ -146,7 +146,7 @@ const ScoreGauge: React.FC<ScoreGaugeProps> = ({
                 duration={duration || 0.001}
                 decimals={0}
               />
-              <div
+              { Percent - PercentTwo !== 0 &&<div
                 style={{
                   fontSize: "12px",
                   color: positive ? "green" : "red",
@@ -156,7 +156,7 @@ const ScoreGauge: React.FC<ScoreGaugeProps> = ({
               >
                 {positive && "+"}
                 {((Percent - PercentTwo) * 10).toFixed(0)}
-              </div>
+              </div>}
             </div>
             <p
               style={{
