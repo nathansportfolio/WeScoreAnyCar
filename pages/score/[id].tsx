@@ -250,6 +250,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       collectedVehicles.map((vehicle:any) => {
         if(vehicle.scrapped) scrappedTotal.push(vehicle.scrapped)
       })
+      
       let scrappedTotalNum = 0;
       scrappedTotal.map((number) => {scrappedTotalNum += number})
       const completeScrappedValue = scrappedTotalNum/scrappedTotal.length
