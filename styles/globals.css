@@ -2,7 +2,7 @@
 
 :root {
   --cardbgfirst: rgb(254,254,254);
-  --cardbgsecond: radial-gradient(circle, rgba(254,254,254,1) 0%, rgba(201,201,201,0.7511379551820728) 100%);
+  --cardbgsecond: radial-gradient(circle, rgba(254,254,254,1) 0%, rgba(213,213,213,0.9178046218487395) 100%);
   --cardtext: black
 }
 

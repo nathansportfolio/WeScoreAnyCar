@@ -38,12 +38,13 @@ const MotAccordion: React.FC<MotAccordionProps> = ({ mots }) => {
             }}
           >
             <Typography>
-              {moment(new Date(completedDate.split(".")[0])).format("DD-MM-YYYY")}{" "}
+              {moment(completedDate).format("DD-MM-YYYY")}{" "}
             </Typography>{" "}
             <Typography
               style={{
+                fontWeight: '500',
                 color:
-                  testResult.toLowerCase() === "passed" ? "#2ecc71" : "#c0392b",
+                  testResult.toLowerCase() === "passed" ? "green" : "red",
               }}
             >
               {testResult}
