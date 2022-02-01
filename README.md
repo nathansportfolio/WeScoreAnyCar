@@ -35,7 +35,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## To Do
 
-1. Mot's Display
+1. Mot's Display - DONE
 
 2. Tax Prices
 

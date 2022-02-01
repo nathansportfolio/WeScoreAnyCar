@@ -150,9 +150,9 @@ const ScoreGauge: React.FC<ScoreGaugeProps> = ({
                 <div
                   style={{
                     fontSize: "12px",
-                    color: positive ? "green" : "red",
+                    color: positive ? "#1abc9c" : "red",
                     marginLeft: "-5px",
-                    fontWeight: "300",
+                    fontWeight: "700",
                   }}
                 >
                   {positive && "+"}

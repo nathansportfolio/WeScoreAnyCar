@@ -53,14 +53,14 @@ const LineCharts: React.FC<LineChartsProps> = ({ mots, averageMots }) => {
         }}
       >
         <CartesianGrid strokeDasharray="4 4" stroke="black" />
-        <XAxis dataKey="name" stroke="white" />
-        <YAxis stroke="white" />
+        <XAxis dataKey="name" stroke="black" />
+        <YAxis stroke="black" />
         <Tooltip />
 
         <Line
           type="monotone"
           dataKey="Average Score"
-          stroke="white"
+          stroke="black"
           strokeWidth={2}
         />
         <Line

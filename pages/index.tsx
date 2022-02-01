@@ -35,6 +35,7 @@ const Home: React.FC<HomeProps> = () => {
 
   return (
     <div className="mountain-background">
+      <div className="mountain-filter">
       {loading && <Spinner />}
       <div className="page-container">
         <div className="inner-page" style={style.inner}>
@@ -80,6 +81,7 @@ const Home: React.FC<HomeProps> = () => {
             </LoadingButton>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

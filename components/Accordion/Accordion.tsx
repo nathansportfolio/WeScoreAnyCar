@@ -22,11 +22,11 @@ const MotAccordion: React.FC<MotAccordionProps> = ({ mots }) => {
     return (
       <Accordion
         disableGutters={true}
-        style={{ backgroundColor: "transparent", color: "white" }}
+        style={{ backgroundColor: "transparent", color: "black" }}
         key={index}
       >
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon style={{ color: "white" }} />}
+          expandIcon={<ExpandMoreIcon style={{ color: "black" }} />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
@@ -38,7 +38,7 @@ const MotAccordion: React.FC<MotAccordionProps> = ({ mots }) => {
             }}
           >
             <Typography>
-              {moment(completedDate.split(" ")[0]).format("DD-MM-YYYY")}{" "}
+              {moment(new Date(completedDate.split(" ")[0])).format("DD-MM-YYYY")}{" "}
             </Typography>{" "}
             <Typography
               style={{
@@ -68,12 +68,12 @@ const MotAccordion: React.FC<MotAccordionProps> = ({ mots }) => {
               <b> No Advisories </b>
             </Typography>
           )}
-          <div style={{ paddingTop: "10px", color: "yellow" }}>
+          <div style={{ paddingTop: "10px", color: "black" }}>
             <Typography>
               Mileage: {odometerValue} {odometerUnit}{" "}
             </Typography>
             <Typography>
-              <i>Mot Test: {motTestNumber}</i>
+              Mot Test: {motTestNumber}
             </Typography>
           </div>
         </AccordionDetails>

@@ -162,6 +162,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
 
   return (
     <div className="mountain-background">
+         <div className="mountain-filter">
       <div className="page-container">
         <div className="score-shelf">
           <div style={style.inner} className="inner-page">
@@ -209,7 +210,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
               }}
             >
               <p style={{ color: "#e74c3c" }}> -Your Score-</p>{" "}
-              <p style={{ color: "white" }}>-Average Score-</p>
+              <p style={{ color: "black" }}>-Average Score-</p>
             </div>
           </div>
         )}
@@ -224,7 +225,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
           <LoadingButton variant="contained"> Save car</LoadingButton>
         </div>
       </div>
-      <div className="footer"> Footer here</div>
+      </div>
     </div>
   );
 };
