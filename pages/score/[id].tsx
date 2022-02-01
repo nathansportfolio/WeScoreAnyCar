@@ -80,11 +80,10 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
   };
 
   const secondCard = {
-    icon: "fas fa-stamp",
+    icon: "fas fa-car",
     firstCol: [
       { title: "Taxed Status", value: taxStatus },
       { title: "Tax Due Date", value: taxDueDate },
-      { title: "Tax Cost (p/y)", value: 9999 },
     ],
     secondCol: [
       { title: "Co2 Emissions", value: co2Emissions },
@@ -93,7 +92,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
   };
 
   const thirdCard = {
-    icon: "fas fa-weight-hanging",
+    icon: "fas fa-car",
     firstCol: [
       { title: "Weight", value: revenueWeight + "kg" },
       { title: "Last V5 generated", value: dateOfLastV5CIssued },
