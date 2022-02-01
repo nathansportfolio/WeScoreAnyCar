@@ -38,7 +38,7 @@ const MotAccordion: React.FC<MotAccordionProps> = ({ mots }) => {
             }}
           >
             <Typography>
-              {moment(completedDate).format("DD-MM-YYYY")}{" "}
+              {completedDate}{" "}
             </Typography>{" "}
             <Typography
               style={{
