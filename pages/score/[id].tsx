@@ -62,7 +62,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
     co2Emissions,
   } = vehicleString;
 
-  const { averageMots, avgScore, avgScrapped } = averageVehicle;
+  const { averageMots, avgScore, avgScrapped, numberOfScrapped } = averageVehicle;
 
   const firstCard = {
     icon: "fas fa-car",
@@ -131,7 +131,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
           </div>
         </div>
         <div
-        className="flex space-between"
+          className="flex space-between"
           style={{
             paddingLeft: "30px",
             paddingRight: "30px",
@@ -174,16 +174,14 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
                   subHeader=""
                 />
               </div>
-              <MileageScore mileage={avgScrapped}/>
+              <MileageScore mileage={avgScrapped} numberOfScrapped={numberOfScrapped} />
             </div>
           </div>
         </div>
         <div className="score-container-chunk">
           <h2 className="score-headers" style={style.header}>
             {make} {model}{" "}
-            <div className="inline-block text-light">
-              {registration}
-            </div>
+            <div className="inline-block text-light">{registration}</div>
           </h2>
           <div className="score-card-container">
             {CarDetailsCard(firstCard)}
@@ -196,20 +194,24 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
           How is your car doing?{" "}
         </h2>
         <div className="mot-container">
-          {motTests.length > 1 &&(<><h3 className="text-centered">MOT issues count</h3>
-          <div className="line-chart-container">
-            <LineChart mots={motChartTests} averageMots={averageMots} />
-          </div>
-          <div
-          className="flex space-between"
-            style={{
-              padding: "10px",
-            }}
-          >
-            <p style={{ color: "green" }}> -Your Score-</p>{" "}
-            <p style={{ color: "blue" }}>-Average Score-</p>
-          </div>
-          </>)}
+          {motTests.length > 1 && (
+            <>
+              <h3 className="text-centered">Last 5 year MOT scores</h3>
+  
+                <LineChart mots={motChartTests} averageMots={averageMots} />
+              <div
+                className="flex space-between"
+                style={{
+                  padding: "10px",
+                }}
+              >
+                <p style={{ color: "#e74c3c" }}> -Your Score-</p>{" "}
+                <p style={{ color: "white" }}>-Average Score-</p>
+              </div>
+            </>
+          )}
+        </div>
+        <div className="mot-container">
           <h2>Your MOT History</h2>
           <div className="mot-entry-container">
             <MotAccordion mots={motTests} />
@@ -238,22 +240,29 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
       const vehicles = await db
         .collection("vehicles")
-        .find({ make: response.make, model: response.model, fuelType: response.fuelType })
+        .find({
+          make: response.make,
+          model: response.model,
+          fuelType: response.fuelType,
+        })
         .toArray();
-      
+
       const collectedVehicles = vehicles.map((vehicle: any) => ({
         ...vehicle,
         mots: JSON.parse(vehicle.mots).filter((mot: any) => mot !== false),
       }));
 
-      const scrappedTotal: any[] = []
-      collectedVehicles.map((vehicle:any) => {
-        if(vehicle.scrapped > 65000) scrappedTotal.push(vehicle.scrapped)
-      })
+      const scrappedTotal: any[] = [];
+      collectedVehicles.map((vehicle: any) => {
+        if (vehicle.scrapped > 65000) scrappedTotal.push(vehicle.scrapped);
+      });
 
       let scrappedTotalNum = 0;
-      scrappedTotal.map((number) => {scrappedTotalNum += number})
-      const completeScrappedValue = scrappedTotalNum/scrappedTotal.length
+      scrappedTotal.map((number) => {
+        scrappedTotalNum += number;
+      });
+      const completeScrappedValue = scrappedTotalNum / scrappedTotal.length;
+      const numberOfScrapped = scrappedTotal.length
 
       let score = 0;
 
@@ -275,7 +284,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
           }
         })
         .filter((mot: any) => mot !== false);
-      
+
       const motsWeWant = collectMots.map((mot: any) => mot.completedDate);
 
       const collection = motsWeWant.map((year: any) => {
@@ -292,7 +301,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
           score: parseFloat(
             (sumOfMotScores / collectedMotsOneYear.length).toFixed(2)
           ),
-          scrappedAverage: completeScrappedValue.toFixed(0)
+          scrappedAverage: completeScrappedValue.toFixed(0),
+          numberOfScrapped
         };
       });
 
@@ -305,7 +315,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
           averageVehicle: {
             averageMots: collection,
             avgScore: parseFloat((avgScore / collection.length).toFixed(2)),
-            avgScrapped: collection[0].scrappedAverage
+            avgScrapped: collection[0].scrappedAverage,
+            numberOfScrapped: collection[0].numberOfScrapped,
           },
         },
       };

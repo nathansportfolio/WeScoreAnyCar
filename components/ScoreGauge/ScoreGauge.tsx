@@ -10,7 +10,7 @@ const cleanPercentage = (percentage: number) => {
 const scoreMaker = (percentage: number) => {
   switch (true) {
     case percentage < 0.3:
-      return (100 - percentage * 30)-0.1;
+      return 100 - percentage * 30 - 0.1;
     case percentage < 0.6:
       return 100 - percentage * 35;
     case percentage < 0.9:
@@ -146,17 +146,19 @@ const ScoreGauge: React.FC<ScoreGaugeProps> = ({
                 duration={duration || 0.001}
                 decimals={0}
               />
-              { Percent - PercentTwo !== 0 &&<div
-                style={{
-                  fontSize: "12px",
-                  color: positive ? "green" : "red",
-                  marginLeft: "-5px",
-                  fontWeight: "300",
-                }}
-              >
-                {positive && "+"}
-                {((Percent - PercentTwo) * 10).toFixed(0)}
-              </div>}
+              {Percent - PercentTwo !== 0 && (
+                <div
+                  style={{
+                    fontSize: "12px",
+                    color: positive ? "green" : "red",
+                    marginLeft: "-5px",
+                    fontWeight: "300",
+                  }}
+                >
+                  {positive && "+"}
+                  {((Percent - PercentTwo) * 10).toFixed(0)}
+                </div>
+              )}
             </div>
             <p
               style={{

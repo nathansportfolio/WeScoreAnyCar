@@ -17,7 +17,7 @@ a {
   box-sizing: border-box;
 }
 
-.text-centered{
+.text-centered {
   text-align: center;
 }
 
@@ -36,17 +36,17 @@ a {
 
 .centered {
   justify-content: center;
-} 
+}
 
 .space-between {
   justify-content: space-between;
 }
 
-.inline-block{
-  display: inline-block
+.inline-block {
+  display: inline-block;
 }
 
-.text-light{
+.text-light {
   font-weight: 300;
 }
 
@@ -184,11 +184,23 @@ h3 {
   max-width: 280px;
   background: hsla(214, 100%, 21%, 1);
 
-  background: linear-gradient(90deg, hsla(214, 100%, 21%, 1) 0%, hsla(203, 100%, 32%, 1) 100%);
-  
-  background: -moz-linear-gradient(90deg, hsla(214, 100%, 21%, 1) 0%, hsla(203, 100%, 32%, 1) 100%);
-  
-  background: -webkit-linear-gradient(90deg, hsla(214, 100%, 21%, 1) 0%, hsla(203, 100%, 32%, 1) 100%);
+  background: linear-gradient(
+    90deg,
+    hsla(214, 100%, 21%, 1) 0%,
+    hsla(203, 100%, 32%, 1) 100%
+  );
+
+  background: -moz-linear-gradient(
+    90deg,
+    hsla(214, 100%, 21%, 1) 0%,
+    hsla(203, 100%, 32%, 1) 100%
+  );
+
+  background: -webkit-linear-gradient(
+    90deg,
+    hsla(214, 100%, 21%, 1) 0%,
+    hsla(203, 100%, 32%, 1) 100%
+  );
   border-radius: 5px;
   padding-bottom: 20px;
   box-shadow: rgba(0, 0, 0, 1) 0px 5px 15px;
@@ -210,12 +222,31 @@ h3 {
 }
 
 .mot-container {
-  background-color: white;
+  color: white;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   margin: 20px;
   padding: 20px;
   text-align: left;
+  background: hsla(214, 100%, 21%, 1);
+
+  background: linear-gradient(
+    90deg,
+    hsla(214, 100%, 21%, 1) 0%,
+    hsla(203, 100%, 32%, 1) 100%
+  );
+
+  background: -moz-linear-gradient(
+    90deg,
+    hsla(214, 100%, 21%, 1) 0%,
+    hsla(203, 100%, 32%, 1) 100%
+  );
+
+  background: -webkit-linear-gradient(
+    90deg,
+    hsla(214, 100%, 21%, 1) 0%,
+    hsla(203, 100%, 32%, 1) 100%
+  );
 }
 
 .line-chart-container {
@@ -242,6 +273,10 @@ h3 {
   margin-top: 10px;
   border-radius: 10px;
   padding: 10px;
+}
+
+.recharts-default-tooltip{
+  background-color: black !important;
 }
 
 .know-car-container {
@@ -282,7 +317,18 @@ h3 {
   position: relative;
 }
 
+.recharts-wrapper{
+  margin-left: none;
+  margin-right: none;
+}
+
+
 @media only screen and (min-width: 600px) {
+  .recharts-wrapper{
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .inner-page {
     max-width: 900px;
   }
@@ -311,4 +357,6 @@ h3 {
     margin-left: auto;
     margin-right: auto;
   }
+
+  
 }

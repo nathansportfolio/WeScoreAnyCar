@@ -47,14 +47,14 @@ const Home: React.FC<HomeProps> = () => {
             average={1.2}
           />
           <h3
-          className="text-white text-centered"
+            className="text-white text-centered"
             style={{
               marginBottom: "100px",
             }}
           >
             It's like a credit score...<br></br> but for your car
           </h3>
-          <div style={{ display: "flex", justifyContent: "center" }} >
+          <div style={{ display: "flex", justifyContent: "center" }}>
             <TextField
               id="outlined-basic"
               label="Enter Registration"

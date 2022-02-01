@@ -88,6 +88,12 @@ const calculateScore = (
   prs: number
 ) => {
   return (
-    advisories * 0.5 + minor + major * 1.5 + dangerous * 3 + user + fail * 2 + prs
+    advisories * 0.5 +
+    minor +
+    major * 1.5 +
+    dangerous * 3 +
+    user +
+    fail * 2 +
+    prs
   );
 };
