@@ -21,24 +21,23 @@ const LineCharts: React.FC<LineChartsProps> = ({ mots, averageMots }) => {
   // console.log("averageMots", averageMots);
 
   //TODO - Count advisories per mot and transform data for dates
-  const data = mots
-    .map((mot: any) => {
-      const avgMot = averageMots.map((newMot: any, index:number) => {
-        if (newMot.completedDate === mot.completedDate.split(".")[0]) {
-             return newMot.score;
-        }
-        return 0;
-      });
-
-      const finalSum = avgMot.reduce(add, 0);
-
-      return {
-        name: mot.completedDate.split(".")[0],
-        "Your Score": mot.motScore,
-        "Average Score": finalSum || 0,
-        amt: 2,
-      };
+  const data = mots.map((mot: any) => {
+    const avgMot = averageMots.map((newMot: any, index: number) => {
+      if (newMot.completedDate === mot.completedDate.split(".")[0]) {
+        return newMot.score;
+      }
+      return 0;
     });
+
+    const finalSum = avgMot.reduce(add, 0);
+
+    return {
+      name: mot.completedDate.split(".")[0],
+      "Your Score": mot.motScore,
+      "Average Score": finalSum || 0,
+      amt: 2,
+    };
+  });
 
   return (
     <div>
@@ -54,7 +53,7 @@ const LineCharts: React.FC<LineChartsProps> = ({ mots, averageMots }) => {
         }}
       >
         <CartesianGrid strokeDasharray="4 4" stroke="black" />
-        <XAxis dataKey="name" stroke="white"/>
+        <XAxis dataKey="name" stroke="white" />
         <YAxis stroke="white" />
         <Tooltip />
 

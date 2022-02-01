@@ -275,7 +275,7 @@ h3 {
   padding: 10px;
 }
 
-.recharts-default-tooltip{
+.recharts-default-tooltip {
   background-color: black !important;
 }
 
@@ -317,14 +317,13 @@ h3 {
   position: relative;
 }
 
-.recharts-wrapper{
+.recharts-wrapper {
   margin-left: none;
   margin-right: none;
 }
 
-
 @media only screen and (min-width: 600px) {
-  .recharts-wrapper{
+  .recharts-wrapper {
     margin-left: auto;
     margin-right: auto;
   }
@@ -357,6 +356,4 @@ h3 {
     margin-left: auto;
     margin-right: auto;
   }
-
-  
 }

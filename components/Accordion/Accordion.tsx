@@ -22,11 +22,11 @@ const MotAccordion: React.FC<MotAccordionProps> = ({ mots }) => {
     return (
       <Accordion
         disableGutters={true}
-        style={{ backgroundColor: "" }}
+        style={{ backgroundColor: "transparent", color: "white" }}
         key={index}
       >
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
+          expandIcon={<ExpandMoreIcon style={{ color: "white" }} />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
@@ -42,7 +42,8 @@ const MotAccordion: React.FC<MotAccordionProps> = ({ mots }) => {
             </Typography>{" "}
             <Typography
               style={{
-                color: testResult.toLowerCase() === "passed" ? "green" : "red",
+                color:
+                  testResult.toLowerCase() === "passed" ? "#2ecc71" : "#c0392b",
               }}
             >
               {testResult}
@@ -51,21 +52,23 @@ const MotAccordion: React.FC<MotAccordionProps> = ({ mots }) => {
         </AccordionSummary>
         <AccordionDetails>
           {rfrAndComments.length > 0 ? (
-            rfrAndComments.map((comment: any) => (
-              <>
-                <Typography>
-                  <b>{comment.type}</b>
-                  <br />
-                  {comment.text}
-                </Typography>
-              </>
-            ))
+            rfrAndComments
+              .sort((a: any, b: any) => (a.type < b.type ? 1 : -1))
+              .map((comment: any) => (
+                <>
+                  <Typography style={{ marginBottom: "" }}>
+                    <b>{comment.type}</b>
+                    <br />
+                    <p style={{ fontSize: "14px" }}>{comment.text}</p>
+                  </Typography>
+                </>
+              ))
           ) : (
             <Typography>
-              <b> A Clean MOT - Nothing to show </b>
+              <b> No Advisories </b>
             </Typography>
           )}
-          <div style={{ borderTop: "dashed 1px", paddingTop: "10px" }}>
+          <div style={{ paddingTop: "10px", color: "yellow" }}>
             <Typography>
               Mileage: {odometerValue} {odometerUnit}{" "}
             </Typography>

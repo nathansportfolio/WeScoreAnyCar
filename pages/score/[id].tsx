@@ -62,7 +62,8 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
     co2Emissions,
   } = vehicleString;
 
-  const { averageMots, avgScore, avgScrapped, numberOfScrapped } = averageVehicle;
+  const { averageMots, avgScore, avgScrapped, numberOfScrapped } =
+    averageVehicle;
 
   const firstCard = {
     icon: "fas fa-car",
@@ -174,7 +175,10 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
                   subHeader=""
                 />
               </div>
-              <MileageScore mileage={avgScrapped} numberOfScrapped={numberOfScrapped} />
+              <MileageScore
+                mileage={avgScrapped}
+                numberOfScrapped={numberOfScrapped}
+              />
             </div>
           </div>
         </div>
@@ -193,24 +197,22 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
           {" "}
           How is your car doing?{" "}
         </h2>
-        <div className="mot-container">
-          {motTests.length > 1 && (
-            <>
-              <h3 className="text-centered">Last 5 year MOT scores</h3>
-  
-                <LineChart mots={motChartTests} averageMots={averageMots} />
-              <div
-                className="flex space-between"
-                style={{
-                  padding: "10px",
-                }}
-              >
-                <p style={{ color: "#e74c3c" }}> -Your Score-</p>{" "}
-                <p style={{ color: "white" }}>-Average Score-</p>
-              </div>
-            </>
-          )}
-        </div>
+        {motTests.length > 1 && (
+          <div className="mot-container">
+            <h3 className="text-centered">Last 5 year MOT scores</h3>
+
+            <LineChart mots={motChartTests} averageMots={averageMots} />
+            <div
+              className="flex space-between"
+              style={{
+                padding: "10px",
+              }}
+            >
+              <p style={{ color: "#e74c3c" }}> -Your Score-</p>{" "}
+              <p style={{ color: "white" }}>-Average Score-</p>
+            </div>
+          </div>
+        )}
         <div className="mot-container">
           <h2>Your MOT History</h2>
           <div className="mot-entry-container">
@@ -262,7 +264,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         scrappedTotalNum += number;
       });
       const completeScrappedValue = scrappedTotalNum / scrappedTotal.length;
-      const numberOfScrapped = scrappedTotal.length
+      const numberOfScrapped = scrappedTotal.length;
 
       let score = 0;
 
@@ -302,7 +304,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
             (sumOfMotScores / collectedMotsOneYear.length).toFixed(2)
           ),
           scrappedAverage: completeScrappedValue.toFixed(0),
-          numberOfScrapped
+          numberOfScrapped,
         };
       });
 
