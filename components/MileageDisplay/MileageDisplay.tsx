@@ -10,10 +10,10 @@ const MileageDisplay: React.FC<MileageDisplayProps> = ({mileage}) => {
 
   return (
     <div>
-      <div className="mileage-score-container">
+      {mileage > 0 && <><div className="mileage-score-container">
         <div className="mileage-text">{numberWithCommas(mileage)}mi</div>
       </div>
-      <p className="mileage-sub-text">Average Life Expectancy</p>
+      <p className="mileage-sub-text">Average Life Expectancy</p></>}
     </div>
   );
 };
