@@ -45,7 +45,7 @@ const LineCharts: React.FC<LineChartsProps> = ({ mots, averageMots }) => {
       <Chart
         width={330}
         height={270}
-        data={data.splice(0, 5)}
+        data={data.splice(0, 5).reverse()}
         margin={{
           top: 5,
           right: 30,
