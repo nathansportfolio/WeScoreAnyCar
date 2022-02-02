@@ -1,1 +1,8 @@
-{"c":["pages/login","webpack"],"r":["pages/account"],"m":["./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2Faccount&absolutePagePath=%2FUsers%2FNathandoore%2FDownloads%2FWeScoreAnyCar%2Fpages%2Faccount.tsx!","./pages/account.tsx"]}
+{
+  "c": ["pages/login", "webpack"],
+  "r": ["pages/account"],
+  "m": [
+    "./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2Faccount&absolutePagePath=%2FUsers%2FNathandoore%2FDownloads%2FWeScoreAnyCar%2Fpages%2Faccount.tsx!",
+    "./pages/account.tsx"
+  ]
+}

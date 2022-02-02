@@ -12,7 +12,7 @@ import {
 } from "firebase/auth";
 import strings from "./strings";
 import useLocalStorage from "../utils/useLocalStorage";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 interface MainContextType {
   user: any;
@@ -114,12 +114,12 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
     }
   };
 
-  const passwordReset = async (email:string = user.email) => {
+  const passwordReset = async (email: string = user.email) => {
     const auth = getAuth();
-    console.log('e', email)
+    console.log("e", email);
     try {
       await sendPasswordResetEmail(auth, email);
-      toast.info('Email Sent!', {
+      toast.info("Email Sent!", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -127,10 +127,10 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
       return false;
     } catch (err: any) {
-      toast.error('No Account Found', {
+      toast.error("No Account Found", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -138,7 +138,7 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+      });
       return err.message;
     }
   };

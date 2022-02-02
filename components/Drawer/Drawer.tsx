@@ -12,6 +12,7 @@ import Logout from "@mui/icons-material/Logout";
 import Login from "@mui/icons-material/Login";
 import Link from "@mui/material/Link";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import IconButton from "@mui/material/IconButton";
 import Close from "@mui/icons-material/Close";
 import { MainContext } from "../../context/context";
@@ -21,7 +22,7 @@ const myComponents: LooseObject = {
   "Sign in": { icon: Login, path: "/login" },
   Register: { icon: AssignmentIcon, path: "/register" },
   "My Account": { icon: ManageAccounts, path: "/account" },
-  Favourites: { icon: AssignmentIcon, path: "/favourites" },
+  Saved: { icon: FavoriteIcon, path: "/saved" },
   Logout: { icon: Logout, path: "/" },
 };
 
@@ -69,7 +70,7 @@ const DrawerComponent: React.FC<DrawerComponentProps> = () => {
       <List>
         {user.email ? (
           <>
-            {["My Account", "Favourites", "Logout"].map((text) =>
+            {["My Account", "Saved", "Logout"].map((text) =>
               dynamicIcons(text)
             )}
           </>

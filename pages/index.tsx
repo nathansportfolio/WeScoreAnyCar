@@ -39,14 +39,16 @@ const Home: React.FC<HomeProps> = () => {
         {loading && <Spinner />}
         <div className="page-container">
           <div className="inner-page" style={style.inner}>
-            <ScoreGauge
-              duration={0}
-              percentage={0.2}
-              header="Get a score"
-              subHeader=""
-              noDelay={true}
-              average={1.2}
-            />
+            <div style={{ justifyContent: "center", display: "flex" }}>
+              <ScoreGauge
+                duration={0}
+                percentage={0.2}
+                header="Get a score"
+                subHeader=""
+                noDelay={true}
+                average={1.2}
+              />
+            </div>
             <h3
               className="text-white text-centered"
               style={{

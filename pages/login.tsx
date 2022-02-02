@@ -109,8 +109,8 @@ const Login: React.FC<LoginProps> = () => {
                 Google
               </LoadingButton>
               <a style={{ color: "#3498db" }} href="/forgotten">
-                  Forgotten Password
-                </a>
+                Forgotten Password
+              </a>
             </div>
           </div>
         </div>

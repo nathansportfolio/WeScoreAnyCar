@@ -99,7 +99,7 @@ const ScoreGauge: React.FC<ScoreGaugeProps> = ({
   const strokePctSecond = ((100 - PercentTwo) * circTwo) / 100;
   const positive = (Percent - PercentTwo) * 10 > 0;
   return (
-    <div style={{ justifyContent: "center", display: "flex" }}>
+    <>
       {header && (
         <div className="score-gauge">
           <svg width={230} height={230}>
@@ -199,7 +199,7 @@ const ScoreGauge: React.FC<ScoreGaugeProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

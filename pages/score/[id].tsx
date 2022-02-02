@@ -4,7 +4,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import LineChart from "../../components/LineChart";
 import MotAccordion from "../../components/Accordion";
 import { GetServerSideProps } from "next";
-import { MotApiCall, getScores } from "../../services/motCalls";
+import { MotApiCall } from "../../services/motCalls";
 import { useRouter } from "next/router";
 import { useEffect, useContext } from "react";
 import { MainContext } from "../../context/context";
@@ -167,13 +167,15 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
             <div style={style.inner} className="inner-page">
               <div className="score-and-mileage-container">
                 <div className="gauges">
-                  <ScoreGauge
-                    duration={1}
-                    average={avgScore}
-                    percentage={score}
-                    header="Your score"
-                    subHeader=""
-                  />
+                  <div style={{ justifyContent: "center", display: "flex" }}>
+                    <ScoreGauge
+                      duration={1}
+                      average={avgScore}
+                      percentage={score}
+                      header="Your score"
+                      subHeader=""
+                    />
+                  </div>
                 </div>
                 <MileageScore
                   mileage={avgScrapped}

@@ -4,7 +4,7 @@ import { GetServerSideProps } from "next";
 import LoadingButton from "@mui/lab/LoadingButton";
 import TextField from "@mui/material/TextField";
 import { MainContext } from "../context/context";
-import FormControl from '@mui/material/FormControl';
+import FormControl from "@mui/material/FormControl";
 
 const style: any = {
   inner: {
@@ -47,28 +47,28 @@ const Login: React.FC<LoginProps> = () => {
           <div className="inner-page" style={style.inner}>
             <div style={style.card}>
               <h1>Forgotten Password</h1>
-                <FormControl>
-              <TextField
-                label="Email"
-                type="email"
-                variant="filled"
-                color="success"
-                sx={{ color: "white", width: "250px" }}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <LoadingButton
-                variant="contained"
-                component="span"
-                sx={{ width: "250px", margin: '10px' }}
-                onClick={() => handleSubmit()}
-                loading={loading}
-                loadingPosition="start"
-                disabled={loading}
-                style={style.button}
-              >
-                Send Reset Link
-              </LoadingButton>
+              <FormControl>
+                <TextField
+                  label="Email"
+                  type="email"
+                  variant="filled"
+                  color="success"
+                  sx={{ color: "white", width: "250px" }}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <LoadingButton
+                  variant="contained"
+                  component="span"
+                  sx={{ width: "250px", margin: "10px" }}
+                  onClick={() => handleSubmit()}
+                  loading={loading}
+                  loadingPosition="start"
+                  disabled={loading}
+                  style={style.button}
+                >
+                  Send Reset Link
+                </LoadingButton>
               </FormControl>
             </div>
           </div>
