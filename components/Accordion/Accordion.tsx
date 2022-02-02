@@ -37,14 +37,11 @@ const MotAccordion: React.FC<MotAccordionProps> = ({ mots }) => {
               justifyContent: "space-between",
             }}
           >
-            <Typography>
-              {completedDate}{" "}
-            </Typography>{" "}
+            <Typography>{completedDate} </Typography>{" "}
             <Typography
               style={{
-                fontWeight: '500',
-                color:
-                  testResult.toLowerCase() === "passed" ? "green" : "red",
+                fontWeight: "500",
+                color: testResult.toLowerCase() === "passed" ? "green" : "red",
               }}
             >
               {testResult}
@@ -73,9 +70,7 @@ const MotAccordion: React.FC<MotAccordionProps> = ({ mots }) => {
             <Typography>
               Mileage: {odometerValue} {odometerUnit}{" "}
             </Typography>
-            <Typography>
-              Mot Test: {motTestNumber}
-            </Typography>
+            <Typography>Mot Test: {motTestNumber}</Typography>
           </div>
         </AccordionDetails>
       </Accordion>

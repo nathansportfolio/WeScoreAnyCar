@@ -13,7 +13,11 @@ import { MainContext } from "../../context/context";
 interface NavigationBarProps {}
 
 const NavigationBar: React.FC<NavigationBarProps> = () => {
-  const { drawer, toggleDrawer, user } = React.useContext(MainContext);
+  const {
+    drawer,
+    toggleDrawer,
+    user: { displayName },
+  } = React.useContext(MainContext);
 
   return (
     <>
@@ -54,8 +58,8 @@ const NavigationBar: React.FC<NavigationBarProps> = () => {
             </Typography>
 
             <Typography component="div" sx={{ flexGrow: 0, fontWeight: 200 }}>
-              {user.name ? (
-                user.name
+              {displayName ? (
+                displayName
               ) : (
                 <Link href="/login">
                   <Button

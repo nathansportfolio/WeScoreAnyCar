@@ -32,18 +32,19 @@ interface LooseObject {
 interface DrawerComponentProps {}
 
 const DrawerComponent: React.FC<DrawerComponentProps> = () => {
-  const { drawer, toggleDrawer, user } = React.useContext(MainContext);
+  const { drawer, toggleDrawer, user, logout } = React.useContext(MainContext);
 
   const dynamicIcons = (text: string) => {
     const Icon = myComponents[text]["icon"];
     const Path = myComponents[text]["path"];
-    let logout = false;
-    if (text === "Logout") logout = true;
+
     return (
       <Link
         key={text}
         href={Path}
-        // onClick={() => (logout ? props.logout() : "")}
+        onClick={() => {
+          if (text === "Logout") logout();
+        }}
         style={{ textDecoration: "none", color: "white" }}
       >
         <ListItem button key={text}>
@@ -66,7 +67,7 @@ const DrawerComponent: React.FC<DrawerComponentProps> = () => {
       <List>{["Get A Score"].map((text) => dynamicIcons(text))}</List>
       <Divider />
       <List>
-        {user.ss ? (
+        {user.email ? (
           <>
             {["My Account", "Favourites", "Logout"].map((text) =>
               dynamicIcons(text)

@@ -4,8 +4,8 @@ import { GetServerSideProps } from "next";
 import LoadingButton from "@mui/lab/LoadingButton";
 import TextField from "@mui/material/TextField";
 import { MainContext } from "../context/context";
-import FacebookIcon from "@mui/icons-material/Facebook";
 import GoogleIcon from "@mui/icons-material/Google";
+import { useRouter } from "next/router";
 
 const style: any = {
   inner: {
@@ -20,6 +20,7 @@ const style: any = {
     padding: "10px",
     width: "350px",
     backgroundColor: "white",
+    marginBottom: "50px",
     borderRadius: "3px",
     maxWidth: "90%",
     textAlign: "center",
@@ -33,73 +34,81 @@ interface LoginProps {}
 const Login: React.FC<LoginProps> = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, loading } = useContext(MainContext);
+  const [errors, setErrors] = useState<Array<string>>([]);
 
-  const handleSubmit = () => {
-    const response = login(email, password);
-    if (response) {
-    }
+  const { login, loading, googleLogin } = useContext(MainContext);
+  const router = useRouter();
+
+  const handleSubmit = async () => {
+    setErrors([]);
+    const error = await login(email, password);
+    if (!error) router.push("/");
+    else setErrors([error]);
+  };
+
+  const handleGoogle = async () => {
+    setErrors([]);
+    const error = await googleLogin()
+    if (!error) router.push("/");
+    else setErrors([error]);
   };
 
   return (
     <div className="mountain-background">
-      <div className="page-container">
-        <div className="inner-page" style={style.inner}>
-          <div style={style.card}>
-            <h1>Login</h1>
-            <TextField
-              label="Email"
-              type="email"
-              variant="filled"
-              color="success"
-              sx={{ color: "white", width: "250px" }}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-              label="Password"
-              type="password"
-              variant="filled"
-              color="success"
-              sx={{ color: "white", width: "250px", marginBottom: "40px" }}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <LoadingButton
-              variant="contained"
-              component="span"
-              sx={{ width: "250px" }}
-              onClick={() => handleSubmit()}
-              loading={loading}
-              loadingPosition="start"
-              disabled={loading}
-              style={style.button}
-            >
-              Login
-            </LoadingButton>
-            <p style={{ marginBottom: "29px" }}>
-              No account?{" "}
-              <a style={{ color: "red" }} href="/register">
-                Sign up
-              </a>
-            </p>
-            <p>Or why not login with:</p>
-            <LoadingButton
-              endIcon={<FacebookIcon />}
-              variant="contained"
-              sx={{ width: "250px", marginBottom: "10px" }}
-              style={style.buttonFb}
-            >
-              Facebook
-            </LoadingButton>
-            <LoadingButton
-              endIcon={<GoogleIcon />}
-              variant="contained"
-              sx={{ width: "250px", marginBottom: "10px" }}
-              style={style.buttonGl}
-            >
-              Google
-            </LoadingButton>
+      <div className="mountain-filter">
+        <div className="page-container">
+          <div className="inner-page" style={style.inner}>
+            <div style={style.card}>
+              <h1>Login</h1>
+              {errors.length > 0 &&
+                errors.map((error) => <p style={{ color: "red" }}>{error}</p>)}
+              <TextField
+                label="Email"
+                type="email"
+                variant="filled"
+                color="success"
+                sx={{ color: "white", width: "250px" }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <TextField
+                label="Password"
+                type="password"
+                variant="filled"
+                color="success"
+                sx={{ color: "white", width: "250px", marginBottom: "40px" }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <LoadingButton
+                variant="contained"
+                component="span"
+                sx={{ width: "250px" }}
+                onClick={() => handleSubmit()}
+                loading={loading}
+                loadingPosition="start"
+                disabled={loading}
+                style={style.button}
+              >
+                Login
+              </LoadingButton>
+              <p style={{ marginBottom: "29px" }}>
+                No account?{" "}
+                <a style={{ color: "red" }} href="/register">
+                  Sign up
+                </a>
+              </p>
+              <p>Or why not login with:</p>
+              <LoadingButton
+                endIcon={<GoogleIcon />}
+                variant="contained"
+                sx={{ width: "250px", marginBottom: "10px" }}
+                style={style.buttonGl}
+                onClick={handleGoogle}
+              >
+                Google
+              </LoadingButton>
+            </div>
           </div>
         </div>
       </div>

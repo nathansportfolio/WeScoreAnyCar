@@ -1,11 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
 
 :root {
-  --cardbgfirst: rgb(254,254,254);
-  --cardbgsecond: radial-gradient(circle, rgba(254,254,254,1) 0%, rgba(228,228,228,1) 100%);
-  --cardtext: black
+  --cardbgfirst: rgb(254, 254, 254);
+  --cardbgsecond: radial-gradient(
+    circle,
+    rgba(254, 254, 254, 1) 0%,
+    rgba(228, 228, 228, 1) 100%
+  );
+  --cardtext: black;
 }
-
 
 html,
 body {
@@ -92,15 +95,15 @@ a {
   width: 100vw;
   background-image: url("/mountain3.jpeg");
   background-repeat: no-repeat;
-  background-size:cover;
+  background-size: cover;
   position: fixed;
   z-index: -1;
 }
 
-.mountain-filter{
+.mountain-filter {
   height: 100vh;
   width: 100vw;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   position: fixed;
   overflow-y: scroll;
 }
@@ -202,7 +205,7 @@ h3 {
   box-shadow: rgba(0, 0, 0, 1) 0px 5px 15px;
   text-align: left;
   font-size: 14px;
-  color: var(  --cardtext);
+  color: var(--cardtext);
   background: var(--cardbgfirst);
   background: var(--cardbgsecond);
 }
@@ -225,7 +228,7 @@ h3 {
   margin: 20px;
   padding: 20px;
   text-align: left;
-  color: var(  --cardtext);
+  color: var(--cardtext);
   background: var(--cardbgfirst);
   background: var(--cardbgsecond);
 }
@@ -257,7 +260,6 @@ h3 {
 }
 
 .recharts-default-tooltip {
-
 }
 
 .know-car-container {
@@ -339,8 +341,7 @@ h3 {
     margin-right: auto;
   }
 
-
-.mountain-background {
-  background-size: 100% 100%;
-}
+  .mountain-background {
+    background-size: 100% 100%;
+  }
 }

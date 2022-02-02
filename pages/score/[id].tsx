@@ -161,69 +161,69 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
 
   return (
     <div className="mountain-background">
-         <div className="mountain-filter">
-      <div className="page-container">
-        <div className="score-shelf">
-          <div style={style.inner} className="inner-page">
-            <div className="score-and-mileage-container">
-              <div className="gauges">
-                <ScoreGauge
-                  duration={1}
-                  average={avgScore}
-                  percentage={score}
-                  header="Your score"
-                  subHeader=""
+      <div className="mountain-filter">
+        <div className="page-container">
+          <div className="score-shelf">
+            <div style={style.inner} className="inner-page">
+              <div className="score-and-mileage-container">
+                <div className="gauges">
+                  <ScoreGauge
+                    duration={1}
+                    average={avgScore}
+                    percentage={score}
+                    header="Your score"
+                    subHeader=""
+                  />
+                </div>
+                <MileageScore
+                  mileage={avgScrapped}
+                  numberOfScrapped={numberOfScrapped}
                 />
               </div>
-              <MileageScore
-                mileage={avgScrapped}
-                numberOfScrapped={numberOfScrapped}
-              />
             </div>
           </div>
-        </div>
-        <div className="score-container-chunk">
+          <div className="score-container-chunk">
+            <h2 className="score-headers" style={style.header}>
+              {make} {model}{" "}
+              <div className="inline-block text-light">{registration}</div>
+            </h2>
+            <div className="score-card-container">
+              {CarDetailsCard(firstCard)}
+              {CarDetailsCard(secondCard)}
+              {CarDetailsCard(thirdCard)}
+            </div>
+          </div>
           <h2 className="score-headers" style={style.header}>
-            {make} {model}{" "}
-            <div className="inline-block text-light">{registration}</div>
+            {" "}
+            How is your car doing?{" "}
           </h2>
-          <div className="score-card-container">
-            {CarDetailsCard(firstCard)}
-            {CarDetailsCard(secondCard)}
-            {CarDetailsCard(thirdCard)}
-          </div>
-        </div>
-        <h2 className="score-headers" style={style.header}>
-          {" "}
-          How is your car doing?{" "}
-        </h2>
-        {motTests.length > 1 && (
-          <div className="mot-container">
-            <h3 className="text-centered">Last 5 year MOT scores</h3>
+          {motTests.length > 1 && (
+            <div className="mot-container">
+              <h3 className="text-centered">Last 5 year MOT scores</h3>
 
-            <LineChart mots={motChartTests} averageMots={averageMots} />
-            <div
-              className="flex space-between"
-              style={{
-                padding: "10px",
-              }}
-            >
-              <p style={{ color: "#e74c3c" }}> -Your Score-</p>{" "}
-              <p style={{ color: "black" }}>-Average Score-</p>
+              <LineChart mots={motChartTests} averageMots={averageMots} />
+              <div
+                className="flex space-between"
+                style={{
+                  padding: "10px",
+                }}
+              >
+                <p style={{ color: "#e74c3c" }}> -Your Score-</p>{" "}
+                <p style={{ color: "black" }}>-Average Score-</p>
+              </div>
+            </div>
+          )}
+          <div className="mot-container">
+            <h2>Your MOT History</h2>
+            <div className="mot-entry-container">
+              <MotAccordion mots={motTests} />
             </div>
           </div>
-        )}
-        <div className="mot-container">
-          <h2>Your MOT History</h2>
-          <div className="mot-entry-container">
-            <MotAccordion mots={motTests} />
+          <div className="know-car-container">
+            <p>Know your car, save this information</p>
+            <LoadingButton variant="contained"> Save car</LoadingButton>
           </div>
         </div>
-        <div className="know-car-container">
-          <p>Know your car, save this information</p>
-          <LoadingButton variant="contained"> Save car</LoadingButton>
-        </div>
-      </div>
       </div>
     </div>
   );
