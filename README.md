@@ -39,8 +39,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 2. Tax Prices
 
-3. Login connected
+3. Login connected - Done
 
-4. Your account stuff
+4. Your account stuff - Done
 
 5. My Vehicles section
+
+6. Notifations

@@ -8,8 +8,10 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import strings from "./strings";
+import useLocalStorage from "../utils/useLocalStorage"
 
 interface MainContextType {
   user: any;
@@ -26,6 +28,7 @@ interface MainContextType {
   register: Function;
   logout: Function;
   googleLogin: Function;
+  passwordReset: Function;
 }
 
 interface MainContextProps {}
@@ -49,11 +52,12 @@ export const MainContext = createContext<MainContextType>({
   register: NullFunction,
   logout: NullFunction,
   googleLogin: NullFunction,
+  passwordReset: NullFunction,
 });
 
 export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useLocalStorage("user", {});
   const [vehicle, setVehicle] = useState({ registration: "sample reg" });
   const [drawer, setDrawer] = useState(false);
   const [error, setError] = useState(false);
@@ -70,7 +74,7 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
     try {
       const {
         user: { displayName, uid, accessToken },
-      } = await signInWithEmailAndPassword(auth, email, password);
+      }:{user:any} = await signInWithEmailAndPassword(auth, email, password);
 
       setUser({ email, displayName, uid, accessToken });
       setLoading(false);
@@ -95,10 +99,20 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
     const provider = new GoogleAuthProvider();
     try {
      await signInWithPopup(auth, provider);
-     const { currentUser: { displayName, uid, accessToken, email }} = auth
+     const { currentUser: { displayName, uid, accessToken, email }}: {currentUser: any}  = auth
      setUser({ email, displayName, uid, accessToken });
      return false
-    } catch (err) {
+    } catch (err:any) {
+      return err.message
+    }
+  };
+
+  const passwordReset = async () => {
+    const auth = getAuth();
+    try {
+     await sendPasswordResetEmail(auth, user.email)
+     return false
+    } catch (err:any) {
       return err.message
     }
   };
@@ -109,10 +123,11 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
     displayName: string
   ) => {
     setLoading(true);
-    const auth = getAuth();
+    const auth:{currentUser:any} = getAuth();
     const {
       user: { uid, accessToken },
-    } = await createUserWithEmailAndPassword(auth, email, password);
+      // @ts-ignore
+    }: {user: any} = await createUserWithEmailAndPassword(auth, email, password);
     updateProfile(auth.currentUser, {
       displayName,
     });
@@ -143,6 +158,7 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
           setUser({});
           return true;
         },
+        passwordReset,
       }}
     >
       {children}
