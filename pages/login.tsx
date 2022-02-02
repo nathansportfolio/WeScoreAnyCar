@@ -48,7 +48,7 @@ const Login: React.FC<LoginProps> = () => {
 
   const handleGoogle = async () => {
     setErrors([]);
-    const error = await googleLogin()
+    const error = await googleLogin();
     if (!error) router.push("/");
     else setErrors([error]);
   };
@@ -108,6 +108,9 @@ const Login: React.FC<LoginProps> = () => {
               >
                 Google
               </LoadingButton>
+              <a style={{ color: "#3498db" }} href="/forgotten">
+                  Forgotten Password
+                </a>
             </div>
           </div>
         </div>

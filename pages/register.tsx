@@ -58,7 +58,7 @@ const Registration: React.FC<RegistrationProps> = () => {
 
   const handleGoogle = async () => {
     setErrors([]);
-    const error = await googleLogin()
+    const error = await googleLogin();
     if (!error) router.push("/");
     else setErrors([error]);
   };

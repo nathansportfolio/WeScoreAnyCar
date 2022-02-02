@@ -33,9 +33,9 @@ const Login: React.FC<LoginProps> = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    await passwordReset()
+    await passwordReset();
     setLoading(false);
-  }
+  };
 
   return (
     <div className="mountain-background">
@@ -49,7 +49,7 @@ const Login: React.FC<LoginProps> = () => {
               <LoadingButton
                 variant="contained"
                 component="span"
-                sx={{ width: "250px", fontSize: '12px' }}
+                sx={{ width: "250px", fontSize: "12px" }}
                 onClick={() => handleSubmit()}
                 loading={loading}
                 loadingPosition="start"

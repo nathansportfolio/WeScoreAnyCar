@@ -11,7 +11,8 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 import strings from "./strings";
-import useLocalStorage from "../utils/useLocalStorage"
+import useLocalStorage from "../utils/useLocalStorage";
+import { toast } from 'react-toastify';
 
 interface MainContextType {
   user: any;
@@ -74,7 +75,11 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
     try {
       const {
         user: { displayName, uid, accessToken },
-      }:{user:any} = await signInWithEmailAndPassword(auth, email, password);
+      }: { user: any } = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
       setUser({ email, displayName, uid, accessToken });
       setLoading(false);
@@ -98,22 +103,43 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
     try {
-     await signInWithPopup(auth, provider);
-     const { currentUser: { displayName, uid, accessToken, email }}: {currentUser: any}  = auth
-     setUser({ email, displayName, uid, accessToken });
-     return false
-    } catch (err:any) {
-      return err.message
+      await signInWithPopup(auth, provider);
+      const {
+        currentUser: { displayName, uid, accessToken, email },
+      }: { currentUser: any } = auth;
+      setUser({ email, displayName, uid, accessToken });
+      return false;
+    } catch (err: any) {
+      return err.message;
     }
   };
 
-  const passwordReset = async () => {
+  const passwordReset = async (email:string = user.email) => {
     const auth = getAuth();
+    console.log('e', email)
     try {
-     await sendPasswordResetEmail(auth, user.email)
-     return false
-    } catch (err:any) {
-      return err.message
+      await sendPasswordResetEmail(auth, email);
+      toast.info('Email Sent!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+      return false;
+    } catch (err: any) {
+      toast.error('No Account Found', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+      return err.message;
     }
   };
 
@@ -123,11 +149,11 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
     displayName: string
   ) => {
     setLoading(true);
-    const auth:{currentUser:any} = getAuth();
+    const auth: { currentUser: any } = getAuth();
     const {
       user: { uid, accessToken },
-      // @ts-ignore
-    }: {user: any} = await createUserWithEmailAndPassword(auth, email, password);
+    }: // @ts-ignore
+    { user: any } = await createUserWithEmailAndPassword(auth, email, password);
     updateProfile(auth.currentUser, {
       displayName,
     });
