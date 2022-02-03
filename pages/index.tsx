@@ -57,7 +57,7 @@ const Home: React.FC<HomeProps> = () => {
             >
               It's like a credit score...<br></br> but for your car
             </h3>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: '100px' }}>
               <TextField
                 id="outlined-basic"
                 label="Enter Registration"
