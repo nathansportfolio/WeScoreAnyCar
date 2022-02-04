@@ -102,8 +102,12 @@ a {
 .saved-card {
   width: 100%;
   color: var(--cardtext);
-  background: rgb(254,254,254);
-  background: radial-gradient(circle, rgba(254,254,254,0.8451108870967742) 0%, rgba(228,228,228,0.9031754032258065) 100%);
+  background: rgb(254, 254, 254);
+  background: radial-gradient(
+    circle,
+    rgba(254, 254, 254, 0.8451108870967742) 0%,
+    rgba(228, 228, 228, 0.9031754032258065) 100%
+  );
   display: relative;
   margin-top: 10px;
   border-radius: 20px;

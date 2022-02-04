@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 interface MainContextType {
   user: any;
   vehicle: any;
+  saved:any
   drawer: boolean;
   loading: boolean;
   getScore: Function;
@@ -30,6 +31,7 @@ interface MainContextType {
   logout: Function;
   googleLogin: Function;
   passwordReset: Function;
+  savedToggle: Function;
 }
 
 interface MainContextProps {}
@@ -41,6 +43,7 @@ const NullFunction = () => {
 export const MainContext = createContext<MainContextType>({
   user: {},
   vehicle: {},
+  saved: [],
   drawer: false,
   loading: false,
   error: false,
@@ -54,6 +57,7 @@ export const MainContext = createContext<MainContextType>({
   logout: NullFunction,
   googleLogin: NullFunction,
   passwordReset: NullFunction,
+  savedToggle: NullFunction
 });
 
 export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
@@ -62,6 +66,7 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
   const [vehicle, setVehicle] = useState({ registration: "sample reg" });
   const [drawer, setDrawer] = useState(false);
   const [error, setError] = useState(false);
+  const [saved, setSaved] = useLocalStorage("saved", []);
   app;
 
   const getScore = async (registration: string) => {
@@ -82,6 +87,13 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
       );
 
       setUser({ email, displayName, uid, accessToken });
+      let monogoResponse = await fetch("/api/handler/"+email, {
+        method: "GET",
+      });
+      let data = await monogoResponse.json();
+      const {message: {saved}} = data
+      console.log('sa', saved)
+      setSaved(saved) 
       setLoading(false);
       return false;
     } catch (err: any) {
@@ -116,7 +128,6 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
 
   const passwordReset = async (email: string = user.email) => {
     const auth = getAuth();
-    console.log("e", email);
     try {
       await sendPasswordResetEmail(auth, email);
       toast.info("Email Sent!", {
@@ -163,11 +174,72 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
     return true;
   };
 
+  const savedToggle = async (car:any) => {
+    const {vehicleString: {registration,
+      engineSize,
+      fuelType,
+      make,
+      model,
+      primaryColour,
+      score}, averageVehicle: {avgScore}} = car;
+    setLoading(true)
+    try{
+           const res = await fetch("/api/handler", {
+      method: "PUT",
+      body: JSON.stringify({email: user.email, registration, engineSize,
+        fuelType,
+        make,
+        model,
+        primaryColour,
+        score, avgScore}),
+    });
+   
+
+    setSaved([...saved, {registration, engineSize,
+      fuelType,
+      make,
+      model,
+      primaryColour,
+      score, avgScore}]) 
+    toast.info("Added", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    setLoading(false)
+  }catch(err){
+    toast.error("Failed...", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+    setLoading(false)
+  }
+  }
+
+
+
+    
+    // await fetch("/api/handler", {
+    //   method: "DELETE",
+    //   body: {email, registration},
+    // });
+
+
   return (
     <MainContext.Provider
       value={{
         user,
         vehicle,
+        saved, 
         drawer,
         loading,
         error,
@@ -185,6 +257,7 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
           return true;
         },
         passwordReset,
+        savedToggle,
       }}
     >
       {children}

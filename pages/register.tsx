@@ -1,6 +1,4 @@
 import { useContext, useState } from "react";
-import { MotApiCall } from "../services/motCalls";
-import { GetServerSideProps } from "next";
 import LoadingButton from "@mui/lab/LoadingButton";
 import TextField from "@mui/material/TextField";
 import { MainContext } from "../context/context";
@@ -29,9 +27,11 @@ const style: any = {
   },
 };
 
-interface RegistrationProps {}
+interface RegistrationProps {
+  user: Function;
+}
 
-const Registration: React.FC<RegistrationProps> = () => {
+const Registration: React.FC<RegistrationProps> = ({ user }) => {
   const { register, loading, googleLogin } = useContext(MainContext);
   const [state, setState] = useState({
     email: "",
@@ -53,7 +53,14 @@ const Registration: React.FC<RegistrationProps> = () => {
       state.password,
       state.displayName
     );
-    if (response) router.push("/");
+    let monogoResponse = await fetch("/api/handler", {
+      method: "POST",
+      body: state.email,
+    });
+
+    if (response && monogoResponse) {
+      router.push("/");
+    }
   };
 
   const handleGoogle = async () => {
@@ -148,12 +155,6 @@ const Registration: React.FC<RegistrationProps> = () => {
       </div>
     </div>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const response = await MotApiCall("BD63SOE");
-
-  return { props: { vehicle: JSON.stringify(response) } };
 };
 
 export default Registration;

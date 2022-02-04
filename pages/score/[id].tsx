@@ -42,7 +42,7 @@ interface ScoreProps {
 
 const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
   const router = useRouter();
-  const { setError, setLoading } = useContext(MainContext);
+  const { setError, setLoading, savedToggle } = useContext(MainContext);
   const {
     registration,
     engineSize,
@@ -223,7 +223,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
           </div>
           <div className="know-car-container">
             <p>Know your car, save this information</p>
-            <LoadingButton variant="contained"> Save car</LoadingButton>
+            <LoadingButton variant="contained" onClick={() => savedToggle({vehicleString, averageVehicle})}> Save car</LoadingButton>
           </div>
         </div>
       </div>

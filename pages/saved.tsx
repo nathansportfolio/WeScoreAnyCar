@@ -1,8 +1,11 @@
-import SavedCard from '../components/SavedCard'
+import SavedCard from "../components/SavedCard";
+import {  useContext } from "react";
+import { MainContext } from "../context/context";
 
 interface SavedProps {}
 
 const Saved: React.FC<SavedProps> = () => {
+  const { saved } = useContext(MainContext);
   const style: any = {
     inner: {
       marginTop: "50px",
@@ -14,12 +17,10 @@ const Saved: React.FC<SavedProps> = () => {
       <div className="mountain-filter">
         <div className="page-container">
           <div className="inner-page" style={style.inner}>
-            <SavedCard percentage={1.9} average={0.4}/>
-            <SavedCard percentage={0.2} average={0.5}/>
-            <SavedCard percentage={2.4} average={1.7}/>
-            <SavedCard percentage={1.3} average={1}/>
-            <SavedCard percentage={0.9} average={1}/>
-            <SavedCard percentage={0.7} average={0.2}/>
+            {saved.map((vehicle:any) => (
+       <SavedCard percentage={vehicle.score} average={vehicle.avgScore} registration={vehicle.registration} make={vehicle.make} model={vehicle.model} />
+            ))}
+     
           </div>
         </div>
       </div>

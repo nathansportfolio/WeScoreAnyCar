@@ -1,3 +1,3 @@
 import SavedCard from "./SavedCard";
 
-export default SavedCard
+export default SavedCard;
