@@ -31,7 +31,7 @@ const Home: React.FC<HomeProps> = () => {
   const HandleSubmit = async () => {
     setError(false);
     setLoading(true);
-    router.push(`/score/${registration}`);
+    router.push(`/score/${registration.replace(/\s/g, '')}`);
   };
 
   return (
