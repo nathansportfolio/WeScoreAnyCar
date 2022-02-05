@@ -47,4 +47,4 @@ let userSchema = new mongoose.Schema(
   { typeKey: "$type" }
 );
 
-module.exports = mongoose.models.User || mongoose.model("User", userSchema);
+export default mongoose.models.User || mongoose.model("User", userSchema);
