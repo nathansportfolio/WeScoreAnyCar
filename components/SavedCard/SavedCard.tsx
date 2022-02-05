@@ -92,14 +92,14 @@ const SavedCard: React.FC<SavedCardProps> = (props) => {
           >
             <Button
               variant="outlined"
-              color="warning"
-              sx={{ marginBottom: "20px" }}
+              sx={{ marginBottom: "20px", color: 'red', borderColor: 'red' }}
               onClick={handler}
             >
               Remove
             </Button>
             <Button
               variant="outlined"
+              sx={{color: 'white', borderColor: 'white'}}
               onClick={() => {
                 setLoading(true);
                 router.push("/score/" + registration);

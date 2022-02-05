@@ -100,11 +100,14 @@ a {
 }
 
 .saved-card {
+  border: solid white 1px;
   width: 100%;
   color: var(--cardtext);
-  background: rgb(254, 254, 254);
+  background: rgb(0,0,0);
+  background: radial-gradient(circle, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.6) 100%);
   display: relative;
   margin-top: 10px;
+  color: white;
   border-radius: 5px;
   padding: 10px;
 }

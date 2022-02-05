@@ -58,7 +58,7 @@ const Saved: React.FC<SavedProps> = () => {
                 </Select>
               </FormControl>
             </div>
-            {user.saved && user.saved.length > 0 ?
+            {user.saved && user.saved.length > 0 &&
               user.saved.map((vehicle: any, index: number) => (
                 <SavedCard
                   key={index}
@@ -72,7 +72,8 @@ const Saved: React.FC<SavedProps> = () => {
                   primaryColour={vehicle.primaryColour}
                   mileage={vehicle.mileage}
                 />
-              )) : <div style={{color: 'white', padding: '10px'}}>No Vehicles Saved</div>}
+              ))}
+            {user.saved && user.saved.length < 1 && <div style={{color: 'white', padding: '10px'}}>No Vehicles Saved</div>}
           </div>
         </div>
       </div>

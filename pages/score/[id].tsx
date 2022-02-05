@@ -42,7 +42,7 @@ interface ScoreProps {
 
 const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
   const router = useRouter();
-  const { setError, setLoading, savedToggle } = useContext(MainContext);
+  const { setError, setLoading, savedToggle, user } = useContext(MainContext);
   const {
     registration,
     engineSize,
