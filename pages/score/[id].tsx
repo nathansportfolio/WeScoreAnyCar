@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { useEffect, useContext } from "react";
 import { MainContext } from "../../context/context";
 import { taxApi } from "../../services/taxApi";
+import Head from "next/head";
 // @ts-ignore
 import clientPromise from "../../services/mongo";
 
@@ -159,7 +160,13 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
     );
   };
 
-  return (
+  return (<div>
+       <Head>
+        <title>WeScoreAnyCar - {registration}</title>
+        <meta property="og:title" content="WeScoreAnyCar - Score" key="score" />
+        <meta name="description" content="Score your vehicle, and find out how your car compares to others. It's like a credit score for your car." />
+      </Head>
+
     <div className="mountain-background">
       <div className="mountain-filter">
         <div className="page-container">
@@ -233,6 +240,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
