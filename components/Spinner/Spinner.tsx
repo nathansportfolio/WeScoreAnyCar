@@ -12,7 +12,8 @@ const Spinner: React.FC<SpinnerProps> = ({}) => {
           >
             <MutatingDots width="100" color="#3498db" ariaLabel="loading" />
           </div>
-          <h2>Working out your score...</h2>
+          <h2>Fetching your score...</h2>
+          <h4 style={{ paddingTop: "20px" }}>(This can take 5-10 seconds)</h4>
         </div>
       </div>
     </div>

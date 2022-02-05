@@ -65,8 +65,6 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
   const { averageMots, avgScore, avgScrapped, numberOfScrapped } =
     averageVehicle;
 
-
-
   const firstCard = {
     icon: "fas fa-car",
     firstCol: [
@@ -140,8 +138,8 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
           }}
         >
           <div>
-            {properties.firstCol.map((details: any) => (
-              <div style={style.card}>
+            {properties.firstCol.map((details: any, index: number) => (
+              <div style={style.card} key={index}>
                 <h3>{details.title}</h3>
                 <h3 className="text-light">{details.value}</h3>
               </div>
@@ -149,8 +147,8 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
           </div>
 
           <div>
-            {properties.secondCol.map((details: any) => (
-              <div style={style.card}>
+            {properties.secondCol.map((details: any, index: number) => (
+              <div style={style.card} key={index}>
                 <h3>{details.title}</h3>
                 <h3 className="text-light">{details.value}</h3>
               </div>
@@ -249,22 +247,22 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       const db = client.db("cars");
       let fullResponse = response;
       if (responseTax) fullResponse = { ...response, ...responseTax };
-      
+
       const vehicles = await db
         .collection("vehicles")
         .find({
           make: response.make,
           model: response.model,
           fuelType: response.fuelType,
-        }).limit(50000)
+        })
+        .limit(12000)
         .toArray();
-
 
       const collectedVehicles = vehicles.map((vehicle: any) => ({
         ...vehicle,
         mots: JSON.parse(vehicle.mots).filter((mot: any) => mot !== false),
       }));
-   
+
       const scrappedTotal: any[] = [];
       collectedVehicles.map((vehicle: any) => {
         if (vehicle.scrapped > 65000) scrappedTotal.push(vehicle.scrapped);

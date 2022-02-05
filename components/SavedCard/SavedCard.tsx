@@ -1,6 +1,6 @@
-import ScoreGauge from "../../components/ScoreGauge";
+import ScoreGaugeSmall from "../../components/ScoreGaugeSmall";
 import Button from "@mui/material/Button";
-import {  useContext } from "react";
+import { useContext } from "react";
 import { MainContext } from "../../context/context";
 import { useRouter } from "next/router";
 
@@ -26,13 +26,14 @@ const SavedCard: React.FC<SavedCardProps> = (props) => {
     mileage,
     engineSize,
     fuelType,
-    primaryColour
+    primaryColour,
   } = props;
-  const { removeSaved } = useContext(MainContext);
-const router = useRouter()
+  const { removeSaved, setLoading } = useContext(MainContext);
+  const router = useRouter();
 
   const handler = () => {
-    removeSaved({avgScore,
+    removeSaved({
+      avgScore,
       score,
       registration,
       make,
@@ -40,28 +41,73 @@ const router = useRouter()
       mileage,
       engineSize,
       fuelType,
-      primaryColour})
-  }
+      primaryColour,
+    });
+  };
 
   return (
     <div className="saved-card flex">
-      <ScoreGauge
+      <ScoreGaugeSmall
+        key={registration}
         duration={1}
         average={avgScore}
         percentage={score}
         header="Your score"
         subHeader=""
       />
-      <div style={{ position: "relative", width: "100%" }}>
+      <div style={{ position: "relative" }}>
         <div
-          style={{ padding: "10px", textAlign: "center", fontWeight: "300" }}
+          style={{
+            fontWeight: "400",
+            marginBottom: "10px",
+            width: "100%",
+            textAlign: "center",
+          }}
         >
-          <p>{registration}</p>
-          <p>{make}</p>
-          <p>{model}</p>
-          <p>83,000mi</p>
-          <Button variant="outlined" onClick={() => router.push('/score/'+registration)}>View</Button>
-          <Button variant="outlined" color="warning" onClick={handler}>Remove</Button>
+          {make} {model}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ padding: "10px", fontWeight: "300" }}>
+            <b>{registration}</b>
+            <div>{engineSize}</div>
+            <div>{fuelType}</div>
+            <div style={{ marginBottom: "15px" }}>{primaryColour}</div>
+            <div>{mileage}mi</div>
+          </div>
+          <div
+            style={{
+              display: "block",
+              width: "100px",
+              textAlign: "center",
+              marginTop: "auto",
+              marginBottom: "auto",
+              marginRight: "20px",
+            }}
+          >
+            <Button
+              variant="outlined"
+              color="warning"
+              sx={{ marginBottom: "20px" }}
+              onClick={handler}
+            >
+              Remove
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setLoading(true);
+                router.push("/score/" + registration);
+              }}
+            >
+              View
+            </Button>
+          </div>
         </div>
       </div>
     </div>

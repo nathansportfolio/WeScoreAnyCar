@@ -57,7 +57,7 @@ const NavigationBar: React.FC<NavigationBarProps> = () => {
               </Link>
             </Typography>
 
-            <Typography component="div" sx={{ flexGrow: 0, fontWeight: 200 }}>
+            <Typography component="div" sx={{ flexGrow: 0, fontWeight: 200 }} suppressHydrationWarning>
               {displayName ? (
                 displayName
               ) : (

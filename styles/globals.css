@@ -90,7 +90,7 @@ a {
 }
 
 .mountain-background {
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   background-image: url("/mountain3.jpeg");
   background-repeat: no-repeat;
@@ -103,14 +103,10 @@ a {
   width: 100%;
   color: var(--cardtext);
   background: rgb(254, 254, 254);
-  background: radial-gradient(
-    circle,
-    rgba(254, 254, 254, 0.8451108870967742) 0%,
-    rgba(228, 228, 228, 0.9031754032258065) 100%
-  );
   display: relative;
   margin-top: 10px;
-  border-radius: 20px;
+  border-radius: 5px;
+  padding: 10px;
 }
 
 .mountain-filter {
@@ -184,6 +180,34 @@ a {
 }
 
 .score-gauge-subheader {
+  padding-top: 148px;
+  color: white;
+  position: absolute;
+  font-size: 0.8em;
+  max-width: 100px;
+  font-weight: 300;
+}
+
+.score-gauge-header-small {
+  padding-top: 30px;
+  color: white;
+  position: absolute;
+  font-size: 0.9em;
+  max-width: 100px;
+  font-weight: 300;
+  text-align: center;
+}
+
+.score-gauge-text-small {
+  padding-top: 55px;
+  color: white;
+  position: absolute;
+  font-size: 2em;
+  max-width: 100px;
+  font-weight: 600;
+}
+
+.score-gauge-subheader-small {
   padding-top: 148px;
   color: white;
   position: absolute;

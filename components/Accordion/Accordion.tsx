@@ -3,7 +3,6 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Typography from "@mui/material/Typography";
-import moment from "moment";
 
 interface MotAccordionProps {
   mots: any;
@@ -52,25 +51,18 @@ const MotAccordion: React.FC<MotAccordionProps> = ({ mots }) => {
           {rfrAndComments.length > 0 ? (
             rfrAndComments
               .sort((a: any, b: any) => (a.type < b.type ? 1 : -1))
-              .map((comment: any) => (
-                <>
-                  <Typography style={{ marginBottom: "" }}>
-                    <b>{comment.type}</b>
-                    <br />
-                    <p style={{ fontSize: "14px" }}>{comment.text}</p>
-                  </Typography>
-                </>
+              .map((comment: any, index: number) => (
+                <div key={index}>
+                  <div style={{ fontStyle: "bold" }}>{comment.type}</div>
+                  <br />
+                  <div style={{ fontSize: "14px" }}>{comment.text}</div>
+                </div>
               ))
           ) : (
-            <Typography>
-              <b> No Advisories </b>
-            </Typography>
+            <div style={{ fontStyle: "bold" }}> No Advisories </div>
           )}
           <div style={{ paddingTop: "10px", color: "black" }}>
-            <Typography>
-              Mileage: {odometerValue} {odometerUnit}{" "}
-            </Typography>
-            <Typography>Mot Test: {motTestNumber}</Typography>
+            Mileage: {odometerValue} {odometerUnit} Mot Test: {motTestNumber}
           </div>
         </AccordionDetails>
       </Accordion>

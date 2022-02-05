@@ -33,6 +33,7 @@ interface MainContextType {
   passwordReset: Function;
   savedToggle: Function;
   removeSaved: Function;
+  sortSaved: Function;
 }
 
 interface MainContextProps {}
@@ -60,6 +61,7 @@ export const MainContext = createContext<MainContextType>({
   passwordReset: NullFunction,
   savedToggle: NullFunction,
   removeSaved: NullFunction,
+  sortSaved: NullFunction,
 });
 
 export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
@@ -88,7 +90,6 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
         password
       );
 
-      setUser({ email, displayName, uid, accessToken });
       let monogoResponse = await fetch("/api/handler/" + email, {
         method: "GET",
       });
@@ -96,8 +97,7 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
       const {
         message: { saved },
       } = data;
-      
-      setSaved(saved);
+      setUser({ email, displayName, uid, accessToken, saved });
       setLoading(false);
       return false;
     } catch (err: any) {
@@ -173,7 +173,7 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
       displayName,
     });
 
-    setUser({ email, displayName, uid, accessToken });
+    setUser({ email, displayName, uid, accessToken, saved: [] });
     setLoading(false);
     return true;
   };
@@ -188,6 +188,7 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
         model,
         primaryColour,
         score,
+        motTests,
       },
       averageVehicle: { avgScore },
     } = car;
@@ -205,22 +206,28 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
           primaryColour,
           score,
           avgScore,
+          mileage: parseInt(motTests[0].odometerValue),
         }),
       });
 
-      setSaved([
-        ...saved,
-        {
-          registration,
-          engineSize,
-          fuelType,
-          make,
-          model,
-          primaryColour,
-          score,
-          avgScore,
-        },
-      ]);
+      setUser({
+        ...user,
+        saved: [
+          ...user.saved,
+          {
+            registration,
+            engineSize,
+            fuelType,
+            make,
+            model,
+            primaryColour,
+            score,
+            avgScore,
+            mileage: parseInt(motTests[0].odometerValue),
+          },
+        ],
+      });
+
       toast.info("Added", {
         position: "top-right",
         autoClose: 5000,
@@ -241,20 +248,22 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
         draggable: true,
         progress: undefined,
       });
+      console.log("er", err);
       setLoading(false);
     }
   };
 
   const removeSaved = async (car: any) => {
     const {
-        registration,
-        engineSize,
-        fuelType,
-        make,
-        model,
-        primaryColour,
-        score,
-        avgScore
+      registration,
+      engineSize,
+      fuelType,
+      make,
+      model,
+      primaryColour,
+      score,
+      avgScore,
+      motTests,
     } = car;
     setLoading(true);
     try {
@@ -270,13 +279,16 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
           primaryColour,
           score,
           avgScore,
+          mileage: parseInt(motTests[0].odometerValue),
         }),
       });
 
-      const removed = saved.filter((vehicle:any) => vehicle.registration !== registration)
+      const saved = user.saved.filter(
+        (vehicle: any) => vehicle.registration !== registration
+      );
 
-      setSaved(removed);
-      
+      setUser({ ...user, saved });
+
       setLoading(false);
     } catch (err) {
       toast.error("Failed...", {
@@ -292,10 +304,26 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
     }
   };
 
-  // await fetch("/api/handler", {
-  //   method: "DELETE",
-  //   body: {email, registration},
-  // });
+  const sortSaved = (value: any) => {
+    const vehicles = user.saved;
+
+    if (value === "SH") {
+      vehicles.sort((a: any, b: any) => {
+        return a.score - b.score;
+      });
+    }
+    if (value === "SL") {
+      vehicles.sort((a: any, b: any) => {
+        return b.score - a.score;
+      });
+    }
+    if (value === "MH") {
+    }
+    if (value === "ML") {
+    }
+
+    setUser({ ...user, saved: vehicles });
+  };
 
   return (
     <MainContext.Provider
@@ -317,11 +345,13 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
           register(email, password, displayName),
         logout: () => {
           setUser({});
+          localStorage.clear();
           return true;
         },
         passwordReset,
         savedToggle,
         removeSaved,
+        sortSaved,
       }}
     >
       {children}

@@ -14,7 +14,6 @@ async function addPost(req, res) {
   try {
     // connect to the database
     let { db } = await connectToDatabase();
-    console.log("res", db);
     // add the post
     await db.collection("users").insertOne(JSON.parse(req.body));
     // return a message

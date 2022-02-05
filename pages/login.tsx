@@ -61,7 +61,11 @@ const Login: React.FC<LoginProps> = () => {
             <div style={style.card}>
               <h1>Login</h1>
               {errors.length > 0 &&
-                errors.map((error) => <p style={{ color: "red" }}>{error}</p>)}
+                errors.map((error, index) => (
+                  <p key={index} style={{ color: "red" }}>
+                    {error}
+                  </p>
+                ))}
               <TextField
                 label="Email"
                 type="email"
@@ -86,7 +90,6 @@ const Login: React.FC<LoginProps> = () => {
                 sx={{ width: "250px" }}
                 onClick={() => handleSubmit()}
                 loading={loading}
-                loadingPosition="start"
                 disabled={loading}
                 style={style.button}
               >
@@ -100,8 +103,9 @@ const Login: React.FC<LoginProps> = () => {
               </p>
               <p>Or why not login with:</p>
               <LoadingButton
-                endIcon={<GoogleIcon />}
+                startIcon={<GoogleIcon />}
                 variant="contained"
+                loadingPosition="start"
                 sx={{ width: "250px", marginBottom: "10px" }}
                 style={style.buttonGl}
                 onClick={handleGoogle}

@@ -17,12 +17,9 @@ function add(accumulator: number, a: number) {
 }
 
 const LineCharts: React.FC<LineChartsProps> = ({ mots, averageMots }) => {
-  
-  // console.log("averageMots", averageMots);
-
   //TODO - Count advisories per mot and transform data for dates
   const data = mots.map((mot: any) => {
-    const avgMot = averageMots.map((newMot: any, index: number) => {
+    const avgMot = averageMots.map((newMot: any) => {
       if (newMot.completedDate === mot.completedDate.split(".")[0]) {
         return newMot.score;
       }

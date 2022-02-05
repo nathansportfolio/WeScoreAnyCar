@@ -33,6 +33,10 @@ const savedSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  mileage: {
+    type: Number,
+    required: true,
+  },
 });
 
 let userSchema = new mongoose.Schema(
@@ -43,6 +47,4 @@ let userSchema = new mongoose.Schema(
   { typeKey: "$type" }
 );
 
-let user = mongoose.model("User", userSchema) || mongoose.model("User");
-
-export default user;
+module.exports = mongoose.models.User || mongoose.model("User", userSchema);

@@ -78,7 +78,11 @@ const Registration: React.FC<RegistrationProps> = ({ user }) => {
             <div style={style.card}>
               <h1>Registration</h1>
               {errors.length > 0 &&
-                errors.map((error) => <p style={{ color: "red" }}>{error}</p>)}
+                errors.map((error, index) => (
+                  <p key={index} style={{ color: "red" }}>
+                    {error}
+                  </p>
+                ))}
               <TextField
                 label="Email"
                 type="email"
@@ -89,7 +93,7 @@ const Registration: React.FC<RegistrationProps> = ({ user }) => {
                 onChange={(e) => setState({ ...state, email: e.target.value })}
               />
               <TextField
-                label="Displayname"
+                label="Display Name"
                 type="fn"
                 variant="filled"
                 color="success"

@@ -12,10 +12,6 @@ export default async function handler(req, res) {
       return updateSaved(req, res);
     }
 
-    case "GET": {
-      return getSaved(req, res);
-    }
-
     case "DELETE": {
       return deletedSaved(req, res);
     }
@@ -43,32 +39,6 @@ async function addUser(req, res) {
   }
 }
 
-async function getSaved(req, res) {
-  const { email } = req.query;
-  await mongoose.connect(
-    "mongodb+srv://james:Jamied123@cars.natt5.mongodb.net/cars?retryWrites=true&w=majority"
-  );
-
-  try {
-    const client = await clientPromise;
-    const db = client.db("cars");
-
-    const user = await db.collection("users").find({
-      email,
-    });
-
-    return res.json({
-      message: user,
-      success: false,
-    });
-  } catch (error) {
-    return res.json({
-      message: new Error(error).message,
-      success: false,
-    });
-  }
-}
-
 async function updateSaved(req, res) {
   const {
     email,
@@ -80,6 +50,7 @@ async function updateSaved(req, res) {
     primaryColour,
     score,
     avgScore,
+    mileage,
   } = JSON.parse(req.body);
   await mongoose.connect(
     "mongodb+srv://james:Jamied123@cars.natt5.mongodb.net/cars?retryWrites=true&w=majority"
@@ -99,12 +70,13 @@ async function updateSaved(req, res) {
             primaryColour,
             score,
             avgScore,
+            mileage,
           },
         },
       },
       { upsert: true, runValidators: true },
       function (err, doc) {}
-    ).clone();
+    );
 
     return res.json({
       message: JSON.parse(JSON.stringify(user)),
@@ -129,6 +101,7 @@ async function deletedSaved(req, res) {
     primaryColour,
     score,
     avgScore,
+    mileage,
   } = JSON.parse(req.body);
 
   await mongoose.connect(
@@ -149,6 +122,7 @@ async function deletedSaved(req, res) {
             primaryColour,
             score,
             avgScore,
+            mileage,
           },
         },
       },

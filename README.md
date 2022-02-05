@@ -35,14 +35,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ## To Do
 
-1. Mot's Display - DONE
+1. Saved cars finish
 
-2. Tax Prices
+2. env vars
 
-3. Login connected - Done
+3. Clean Up
 
-4. Your account stuff - Done
-
-5. My Vehicles section
-
-6. Notifations - Done
+4. Vercel
