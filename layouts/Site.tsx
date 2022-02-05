@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Script from "next/script";
 import NavigationBar from "../components/NavigationBar";
+import Favicon from '../components/Favicon'
 
 interface SiteProps {
   content: React.ReactNode;
@@ -13,15 +14,11 @@ const Site: React.FC<SiteProps> = ({ content }) => {
         <title>WeScoreAnyCar</title>
         <meta name="description" content="//TODO: SEO" />
 
-        <script
-          async
-          type="text/javascript"
-          src="https://api.getcandid.com/scripts/widget.js"
-        />
         <link
           rel="stylesheet"
           href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
         />
+             <Favicon />
       </Head>
       <Script
         id="awsrum"
