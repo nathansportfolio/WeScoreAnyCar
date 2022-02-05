@@ -263,7 +263,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
           model: response.model,
           fuelType: response.fuelType,
         })
-        .limit(12000)
+        .limit(8000)
         .toArray();
 
       const collectedVehicles = vehicles.map((vehicle: any) => ({
