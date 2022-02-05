@@ -10,5 +10,4 @@ export default async function newUser() {
     saved: [],
   });
   response.save();
-  console.log("res", response);
 }

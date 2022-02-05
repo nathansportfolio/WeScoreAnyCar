@@ -17,7 +17,7 @@ if (!MONGODB_DB) {
 let cachedClient = null;
 let cachedDb = null;
 
-export async function connectToDatabase() {
+async function connectToDatabase() {
   // check the cached.
   if (cachedClient && cachedDb) {
     // load from cache
@@ -47,3 +47,5 @@ export async function connectToDatabase() {
     db: cachedDb,
   };
 }
+
+export default connectToDatabase;

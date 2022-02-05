@@ -43,6 +43,6 @@ let userSchema = new mongoose.Schema(
   { typeKey: "$type" }
 );
 
-let user = mongoose.model("User", userSchema) || mongoose.model('User') 
+let user = mongoose.model("User", userSchema) || mongoose.model("User");
 
-export default user
+export default user;

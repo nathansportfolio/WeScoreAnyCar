@@ -43,22 +43,19 @@ async function addUser(req, res) {
   }
 }
 
-
 async function getSaved(req, res) {
-  const { email } = req.query
+  const { email } = req.query;
   await mongoose.connect(
     "mongodb+srv://james:Jamied123@cars.natt5.mongodb.net/cars?retryWrites=true&w=majority"
   );
 
   try {
     const client = await clientPromise;
-      const db = client.db("cars");
+    const db = client.db("cars");
 
-      const user = await db
-        .collection("users")
-        .find({
-         email
-        })
+    const user = await db.collection("users").find({
+      email,
+    });
 
     return res.json({
       message: user,
@@ -73,12 +70,17 @@ async function getSaved(req, res) {
 }
 
 async function updateSaved(req, res) {
-    const {email, registration, engineSize,
-      fuelType,
-      make,
-      model,
-      primaryColour,
-      score, avgScore} = JSON.parse(req.body)
+  const {
+    email,
+    registration,
+    engineSize,
+    fuelType,
+    make,
+    model,
+    primaryColour,
+    score,
+    avgScore,
+  } = JSON.parse(req.body);
   await mongoose.connect(
     "mongodb+srv://james:Jamied123@cars.natt5.mongodb.net/cars?retryWrites=true&w=majority"
   );
@@ -86,20 +88,28 @@ async function updateSaved(req, res) {
   try {
     const user = await UserModel.updateOne(
       { email },
-      { $push: { saved: { registration, engineSize,
-        fuelType,
-        make,
-        model,
-        primaryColour,
-        score, avgScore } } },
+      {
+        $push: {
+          saved: {
+            registration,
+            engineSize,
+            fuelType,
+            make,
+            model,
+            primaryColour,
+            score,
+            avgScore,
+          },
+        },
+      },
       { upsert: true, runValidators: true },
       function (err, doc) {}
     ).clone();
-    
+
     return res.json({
       message: JSON.parse(JSON.stringify(user)),
       success: true,
-  });
+    });
   } catch (error) {
     return res.json({
       message: new Error(error).message,
@@ -109,7 +119,18 @@ async function updateSaved(req, res) {
 }
 
 async function deletedSaved(req, res) {
-    const {email, registration} = req.body
+  const {
+    email,
+    registration,
+    engineSize,
+    fuelType,
+    make,
+    model,
+    primaryColour,
+    score,
+    avgScore,
+  } = JSON.parse(req.body);
+
   await mongoose.connect(
     "mongodb+srv://james:Jamied123@cars.natt5.mongodb.net/cars?retryWrites=true&w=majority"
   );
@@ -117,7 +138,20 @@ async function deletedSaved(req, res) {
   try {
     const user = await UserModel.updateOne(
       { email },
-      { $pull: { saved: { registration} } },
+      {
+        $pull: {
+          saved: {
+            registration,
+            engineSize,
+            fuelType,
+            make,
+            model,
+            primaryColour,
+            score,
+            avgScore,
+          },
+        },
+      },
       { upsert: true, runValidators: true },
       function (err, doc) {}
     );

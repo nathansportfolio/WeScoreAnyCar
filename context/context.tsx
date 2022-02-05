@@ -17,7 +17,7 @@ import { toast } from "react-toastify";
 interface MainContextType {
   user: any;
   vehicle: any;
-  saved:any
+  saved: any;
   drawer: boolean;
   loading: boolean;
   getScore: Function;
@@ -32,6 +32,7 @@ interface MainContextType {
   googleLogin: Function;
   passwordReset: Function;
   savedToggle: Function;
+  removeSaved: Function;
 }
 
 interface MainContextProps {}
@@ -57,7 +58,8 @@ export const MainContext = createContext<MainContextType>({
   logout: NullFunction,
   googleLogin: NullFunction,
   passwordReset: NullFunction,
-  savedToggle: NullFunction
+  savedToggle: NullFunction,
+  removeSaved: NullFunction,
 });
 
 export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
@@ -87,13 +89,15 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
       );
 
       setUser({ email, displayName, uid, accessToken });
-      let monogoResponse = await fetch("/api/handler/"+email, {
+      let monogoResponse = await fetch("/api/handler/" + email, {
         method: "GET",
       });
       let data = await monogoResponse.json();
-      const {message: {saved}} = data
-      console.log('sa', saved)
-      setSaved(saved) 
+      const {
+        message: { saved },
+      } = data;
+      
+      setSaved(saved);
       setLoading(false);
       return false;
     } catch (err: any) {
@@ -174,72 +178,131 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
     return true;
   };
 
-  const savedToggle = async (car:any) => {
-    const {vehicleString: {registration,
-      engineSize,
-      fuelType,
-      make,
-      model,
-      primaryColour,
-      score}, averageVehicle: {avgScore}} = car;
-    setLoading(true)
-    try{
-           const res = await fetch("/api/handler", {
-      method: "PUT",
-      body: JSON.stringify({email: user.email, registration, engineSize,
+  const savedToggle = async (car: any) => {
+    const {
+      vehicleString: {
+        registration,
+        engineSize,
         fuelType,
         make,
         model,
         primaryColour,
-        score, avgScore}),
-    });
-   
+        score,
+      },
+      averageVehicle: { avgScore },
+    } = car;
+    setLoading(true);
+    try {
+      const res = await fetch("/api/handler", {
+        method: "PUT",
+        body: JSON.stringify({
+          email: user.email,
+          registration,
+          engineSize,
+          fuelType,
+          make,
+          model,
+          primaryColour,
+          score,
+          avgScore,
+        }),
+      });
 
-    setSaved([...saved, {registration, engineSize,
-      fuelType,
-      make,
-      model,
-      primaryColour,
-      score, avgScore}]) 
-    toast.info("Added", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-    setLoading(false)
-  }catch(err){
-    toast.error("Failed...", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-    setLoading(false)
-  }
-  }
+      setSaved([
+        ...saved,
+        {
+          registration,
+          engineSize,
+          fuelType,
+          make,
+          model,
+          primaryColour,
+          score,
+          avgScore,
+        },
+      ]);
+      toast.info("Added", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setLoading(false);
+    } catch (err) {
+      toast.error("Failed...", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setLoading(false);
+    }
+  };
 
+  const removeSaved = async (car: any) => {
+    const {
+        registration,
+        engineSize,
+        fuelType,
+        make,
+        model,
+        primaryColour,
+        score,
+        avgScore
+    } = car;
+    setLoading(true);
+    try {
+      const res = await fetch("/api/handler", {
+        method: "DELETE",
+        body: JSON.stringify({
+          email: user.email,
+          registration,
+          engineSize,
+          fuelType,
+          make,
+          model,
+          primaryColour,
+          score,
+          avgScore,
+        }),
+      });
 
+      const removed = saved.filter((vehicle:any) => vehicle.registration !== registration)
 
-    
-    // await fetch("/api/handler", {
-    //   method: "DELETE",
-    //   body: {email, registration},
-    // });
+      setSaved(removed);
+      
+      setLoading(false);
+    } catch (err) {
+      toast.error("Failed...", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setLoading(false);
+    }
+  };
 
+  // await fetch("/api/handler", {
+  //   method: "DELETE",
+  //   body: {email, registration},
+  // });
 
   return (
     <MainContext.Provider
       value={{
         user,
         vehicle,
-        saved, 
+        saved,
         drawer,
         loading,
         error,
@@ -258,6 +321,7 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
         },
         passwordReset,
         savedToggle,
+        removeSaved,
       }}
     >
       {children}

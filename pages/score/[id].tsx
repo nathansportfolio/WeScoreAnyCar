@@ -65,6 +65,8 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
   const { averageMots, avgScore, avgScrapped, numberOfScrapped } =
     averageVehicle;
 
+
+
   const firstCard = {
     icon: "fas fa-car",
     firstCol: [
@@ -223,7 +225,13 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
           </div>
           <div className="know-car-container">
             <p>Know your car, save this information</p>
-            <LoadingButton variant="contained" onClick={() => savedToggle({vehicleString, averageVehicle})}> Save car</LoadingButton>
+            <LoadingButton
+              variant="contained"
+              onClick={() => savedToggle({ vehicleString, averageVehicle })}
+            >
+              {" "}
+              Save car
+            </LoadingButton>
           </div>
         </div>
       </div>
@@ -241,21 +249,22 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       const db = client.db("cars");
       let fullResponse = response;
       if (responseTax) fullResponse = { ...response, ...responseTax };
-
+      
       const vehicles = await db
         .collection("vehicles")
         .find({
           make: response.make,
           model: response.model,
           fuelType: response.fuelType,
-        })
+        }).limit(50000)
         .toArray();
+
 
       const collectedVehicles = vehicles.map((vehicle: any) => ({
         ...vehicle,
         mots: JSON.parse(vehicle.mots).filter((mot: any) => mot !== false),
       }));
-
+   
       const scrappedTotal: any[] = [];
       collectedVehicles.map((vehicle: any) => {
         if (vehicle.scrapped > 65000) scrappedTotal.push(vehicle.scrapped);
