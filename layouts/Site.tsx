@@ -20,7 +20,7 @@ const Site: React.FC<SiteProps> = ({ content }) => {
         />
          <script
             async
-            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+            src={`https://www.googletagmanager.com/gtag/js?id=G-43XNK2KX74`}
           />
           <script
             dangerouslySetInnerHTML={{
@@ -28,7 +28,7 @@ const Site: React.FC<SiteProps> = ({ content }) => {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+            gtag('config', 'G-43XNK2KX74', {
               page_path: window.location.pathname,
             });
           `,
