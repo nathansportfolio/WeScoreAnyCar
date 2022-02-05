@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 import { MainContext } from "../context/context";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useRouter } from "next/router";
+import Head from 'next/head'
 
 const style: any = {
   inner: {
@@ -71,6 +72,13 @@ const Registration: React.FC<RegistrationProps> = ({ user }) => {
   };
 
   return (
+    <div>
+        <Head>
+        <title>WeScoreAnyCar - Register</title>
+        <meta property="og:title" content="WeScoreAnyCar - Register" key="register" />
+        <meta name="description" content="Score your vehicle, and find out how your car compares to others. It's like a credit score for your car." />
+      </Head>
+
     <div className="mountain-background">
       <div className="mountain-filter">
         <div className="page-container">
@@ -157,6 +165,7 @@ const Registration: React.FC<RegistrationProps> = ({ user }) => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
