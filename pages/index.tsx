@@ -32,9 +32,9 @@ const Home: React.FC<HomeProps> = () => {
   const HandleSubmit = async () => {
     setError(false);
     setLoading(true);
-    const STAGING = window.location.hostname === "localhost"
+ 
     let response = await fetch(
-      STAGING ? "http://localhost:3000/api/vehicle/" + registration: "/api/vehicle/" + registration,
+      "/api/vehicle/" + registration,
       {
         method: "GET",
       }
