@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
 import { MainContext } from "../context/context";
 import Spinner from "../components/Spinner";
-import {event} from '../services/ga';
+// import {event} from '../services/ga';
 
 const style: any = {
   inner: {
@@ -32,19 +32,17 @@ const Home: React.FC<HomeProps> = () => {
   const HandleSubmit = async () => {
     setError(false);
     setLoading(true);
- 
+    const STAGING = window.location.hostname === "localhost"
     let response = await fetch(
-      "/api/vehicle/" + registration,
+      STAGING ? "http://localhost:3000/api/vehicle/" + registration: "/api/vehicle/" + registration,
       {
         method: "GET",
       }
     );
 
-    console.log('res', response)
     const { message } = await response.json();
-    console.log('res', message)
     if (message.registration) {
-      event(message.registration)
+      // event(message.registration)
       router.push(`/score/${registration.replace(/\s/g, "")}`);
     } else {
       setError(true);
