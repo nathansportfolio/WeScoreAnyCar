@@ -37,9 +37,9 @@ const LineCharts: React.FC<LineChartsProps> = ({ mots, averageMots }) => {
   });
 
   return (
-    <div>
+    <div className="flex justify-centered ">
       <Chart
-        width={330}
+        width={310}
         height={270}
         data={data.splice(0, 5).reverse()}
         margin={{

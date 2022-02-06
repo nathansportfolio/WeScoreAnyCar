@@ -1,4 +1,4 @@
-import UserModel from "../services/user";
+import UserModel from "./models/user";
 import dbConnect from "../services/newMongo";
 
 export default async function newUser() {

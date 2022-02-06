@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import UserModel from "../../../services/user";
-import clientPromise from "../../../services/mongo";
+import UserModel from "../../../services/models/user";
 
 export default async function handler(req, res) {
   // switch the methods
@@ -19,9 +18,7 @@ export default async function handler(req, res) {
 }
 
 async function addUser(req, res) {
-  await mongoose.connect(
-    "mongodb+srv://james:Jamied123@cars.natt5.mongodb.net/cars?retryWrites=true&w=majority"
-  );
+  await mongoose.connect(process.env.MONGODB_URI);
 
   try {
     let response = new UserModel({ email: req.body, saved: [] });
@@ -52,10 +49,7 @@ async function updateSaved(req, res) {
     avgScore,
     mileage,
   } = JSON.parse(req.body);
-  await mongoose.connect(
-    "mongodb+srv://james:Jamied123@cars.natt5.mongodb.net/cars?retryWrites=true&w=majority"
-  );
-
+  await mongoose.connect(process.env.MONGODB_URI);
   try {
     const user = await UserModel.updateOne(
       { email },
@@ -104,9 +98,7 @@ async function deletedSaved(req, res) {
     mileage,
   } = JSON.parse(req.body);
 
-  await mongoose.connect(
-    "mongodb+srv://james:Jamied123@cars.natt5.mongodb.net/cars?retryWrites=true&w=majority"
-  );
+  await mongoose.connect(process.env.MONGODB_URI);
 
   try {
     const user = await UserModel.updateOne(
@@ -129,6 +121,7 @@ async function deletedSaved(req, res) {
       { upsert: true, runValidators: true },
       function (err, doc) {}
     );
+
     return res.json({
       message: user,
       success: false,

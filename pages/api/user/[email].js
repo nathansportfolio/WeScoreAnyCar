@@ -1,6 +1,4 @@
-import mongoose from "mongoose";
-import UserModel from "../../../services/user";
-import clientPromise from "../../../services/mongo";
+import connectToDatabase from "../../../services/newMongo";
 
 export default async function handler(req, res) {
   // switch the methods
@@ -13,15 +11,10 @@ export default async function handler(req, res) {
 
 async function getSaved(req, res) {
   const { email } = req.query;
-  await mongoose.connect(
-    "mongodb+srv://james:Jamied123@cars.natt5.mongodb.net/cars?retryWrites=true&w=majority"
-  );
 
   try {
-    const client = await clientPromise;
-    const db = client.db("cars");
-
-    const user = await db.collection("users").findOne({
+    const connected = await connectToDatabase();
+    const user = await connected.db.collection("users").findOne({
       email,
     });
 

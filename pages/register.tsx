@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import { MainContext } from "../context/context";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useRouter } from "next/router";
-import Head from 'next/head'
+import Head from "next/head";
 
 const style: any = {
   inner: {
@@ -49,6 +49,10 @@ const Registration: React.FC<RegistrationProps> = ({ user }) => {
       setErrors(["Passwords do not match"]);
       return;
     }
+    if(state.password.split('').length < 6){
+      setErrors(["Password need to be at least 6 characters"]);
+      return;
+    } 
     const response = await register(
       state.email,
       state.password,
@@ -73,99 +77,108 @@ const Registration: React.FC<RegistrationProps> = ({ user }) => {
 
   return (
     <div>
-        <Head>
+      <Head>
         <title>WeScoreAnyCar - Register</title>
-        <meta property="og:title" content="WeScoreAnyCar - Register" key="register" />
-        <meta name="description" content="Score your vehicle, and find out how your car compares to others. It's like a credit score for your car." />
+        <meta
+          property="og:title"
+          content="WeScoreAnyCar - Register"
+          key="register"
+        />
+        <meta
+          name="description"
+          content="Score your vehicle, and find out how your car compares to others. It's like a credit score for your car."
+        />
       </Head>
 
-    <div className="mountain-background">
-      <div className="mountain-filter">
-        <div className="page-container">
-          <div className="inner-page" style={style.inner}>
-            <div style={style.card}>
-              <h1>Registration</h1>
-              {errors.length > 0 &&
-                errors.map((error, index) => (
-                  <p key={index} style={{ color: "red" }}>
-                    {error}
-                  </p>
-                ))}
-              <TextField
-                label="Email"
-                type="email"
-                variant="filled"
-                color="success"
-                sx={{ color: "white", width: "250px" }}
-                value={state.email}
-                onChange={(e) => setState({ ...state, email: e.target.value })}
-              />
-              <TextField
-                label="Display Name"
-                type="fn"
-                variant="filled"
-                color="success"
-                sx={{ color: "white", width: "250px" }}
-                value={state.displayName}
-                onChange={(e) =>
-                  setState({ ...state, displayName: e.target.value })
-                }
-              />
-              <TextField
-                label="Password"
-                type="password"
-                variant="filled"
-                color="success"
-                sx={{ color: "white", width: "250px" }}
-                value={state.password}
-                onChange={(e) =>
-                  setState({ ...state, password: e.target.value })
-                }
-              />
-              <TextField
-                label="Confirm Password"
-                type="password"
-                variant="filled"
-                color="success"
-                sx={{ color: "white", width: "250px", marginBottom: "29px" }}
-                value={state.confirmPassword}
-                onChange={(e) =>
-                  setState({ ...state, confirmPassword: e.target.value })
-                }
-              />
-              <LoadingButton
-                variant="contained"
-                component="span"
-                sx={{ width: "250px" }}
-                onClick={submitHandler}
-                loading={loading}
-                size="large"
-                disabled={!state.confirmPassword}
-                style={style.button}
-              >
-                Register
-              </LoadingButton>
-              <p style={{ marginBottom: "40px" }}>
-                Already have an account?{" "}
-                <a style={{ color: "red" }} href="/login">
-                  Sign in
-                </a>
-              </p>
-              <p>Or why not sign straight in with:</p>
-              <LoadingButton
-                endIcon={<GoogleIcon />}
-                variant="contained"
-                sx={{ width: "250px", marginBottom: "10px" }}
-                style={style.buttonGl}
-                onClick={handleGoogle}
-              >
-                Google
-              </LoadingButton>
+      <div className="mountain-background">
+        <div className="mountain-filter">
+          <div className="page-container">
+            <div className="inner-page" style={style.inner}>
+              <div style={style.card}>
+                <h1>Registration</h1>
+                {errors.length > 0 &&
+                  errors.map((error, index) => (
+                    <p key={index} style={{ color: "red" }}>
+                      {error}
+                    </p>
+                  ))}
+                <TextField
+                  label="Email"
+                  type="email"
+                  variant="filled"
+                  color="success"
+                  sx={{ color: "white", width: "250px" }}
+                  value={state.email}
+                  onChange={(e) =>
+                    setState({ ...state, email: e.target.value })
+                  }
+                />
+                <TextField
+                  label="Display Name"
+                  type="fn"
+                  variant="filled"
+                  color="success"
+                  sx={{ color: "white", width: "250px" }}
+                  value={state.displayName}
+                  onChange={(e) =>
+                    setState({ ...state, displayName: e.target.value })
+                  }
+                />
+                <TextField
+                  label="Password"
+                  type="password"
+                  variant="filled"
+                  color="success"
+                  sx={{ color: "white", width: "250px" }}
+                  value={state.password}
+                  onChange={(e) =>
+                    setState({ ...state, password: e.target.value })
+                  }
+                />
+                <TextField
+                  label="Confirm Password"
+                  type="password"
+                  variant="filled"
+                  color="success"
+                  sx={{ color: "white", width: "250px", marginBottom: "29px" }}
+                  value={state.confirmPassword}
+                  onChange={(e) =>
+                    setState({ ...state, confirmPassword: e.target.value })
+                  }
+                />
+                <LoadingButton
+                  variant="contained"
+                  component="span"
+                  sx={{ width: "250px" }}
+                  onClick={submitHandler}
+                  loading={loading}
+                  size="large"
+                  disabled={!state.confirmPassword}
+                  style={style.button}
+                >
+                  Register
+                </LoadingButton>
+                <p style={{ marginBottom: "40px" }}>
+                  Already have an account?{" "}
+                  <a style={{ color: "red" }} href="/login">
+                    Sign in
+                  </a>
+                </p>
+                {/* <p>Or why not sign straight in with:</p>
+                <LoadingButton
+                  endIcon={<GoogleIcon />}
+                  variant="contained"
+                  sx={{ width: "250px", marginBottom: "10px" }}
+                  style={style.buttonGl}
+                  onClick={handleGoogle}
+                >
+                  Google
+                </LoadingButton> */}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };

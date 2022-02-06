@@ -55,7 +55,7 @@ const SavedCard: React.FC<SavedCardProps> = (props) => {
         header="Your score"
         subHeader=""
       />
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative", width: "100%" }}>
         <div
           style={{
             fontWeight: "400",
@@ -92,14 +92,14 @@ const SavedCard: React.FC<SavedCardProps> = (props) => {
           >
             <Button
               variant="outlined"
-              sx={{ marginBottom: "20px", color: 'red', borderColor: 'red' }}
+              sx={{ marginBottom: "20px", color: "red", borderColor: "red" }}
               onClick={handler}
             >
               Remove
             </Button>
             <Button
               variant="outlined"
-              sx={{color: 'white', borderColor: 'white'}}
+              sx={{ color: "white", borderColor: "white" }}
               onClick={() => {
                 setLoading(true);
                 router.push("/score/" + registration);

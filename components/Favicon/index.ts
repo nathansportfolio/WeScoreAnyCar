@@ -1,3 +1,3 @@
-import Favicon from './Favicon'
+import Favicon from "./Favicon";
 
-export default Favicon
+export default Favicon;

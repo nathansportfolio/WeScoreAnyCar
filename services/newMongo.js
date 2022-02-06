@@ -2,7 +2,7 @@ import { MongoClient } from "mongodb";
 
 const MONGODB_URI =
   "mongodb+srv://james:Jamied123@cars.natt5.mongodb.net/cars?retryWrites=true&w=majority";
-const MONGODB_DB = "Users";
+const MONGODB_DB = "cars";
 
 // check the MongoDB URI
 if (!MONGODB_URI) {

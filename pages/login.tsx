@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField";
 import { MainContext } from "../context/context";
 import GoogleIcon from "@mui/icons-material/Google";
 import { useRouter } from "next/router";
-import Head from 'next/head'
+import Head from "next/head";
 
 const style: any = {
   inner: {
@@ -56,78 +56,81 @@ const Login: React.FC<LoginProps> = () => {
 
   return (
     <div>
-       <Head>
+      <Head>
         <title>WeScoreAnyCar - Login</title>
         <meta property="og:title" content="WeScoreAnyCar - Login" key="login" />
-        <meta name="description" content="Score your vehicle, and find out how your car compares to others. It's like a credit score for your car." />
+        <meta
+          name="description"
+          content="Score your vehicle, and find out how your car compares to others. It's like a credit score for your car."
+        />
       </Head>
- 
-    <div className="mountain-background">
-      <div className="mountain-filter">
-        <div className="page-container">
-          <div className="inner-page" style={style.inner}>
-            <div style={style.card}>
-              <h1>Login</h1>
-              {errors.length > 0 &&
-                errors.map((error, index) => (
-                  <p key={index} style={{ color: "red" }}>
-                    {error}
-                  </p>
-                ))}
-              <TextField
-                label="Email"
-                type="email"
-                variant="filled"
-                color="success"
-                sx={{ color: "white", width: "250px" }}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <TextField
-                label="Password"
-                type="password"
-                variant="filled"
-                color="success"
-                sx={{ color: "white", width: "250px", marginBottom: "40px" }}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <LoadingButton
-                variant="contained"
-                component="span"
-                sx={{ width: "250px" }}
-                onClick={() => handleSubmit()}
-                loading={loading}
-                disabled={loading}
-                style={style.button}
-              >
-                Login
-              </LoadingButton>
-              <p style={{ marginBottom: "29px" }}>
-                No account?{" "}
-                <a style={{ color: "red" }} href="/register">
-                  Sign up
+
+      <div className="mountain-background">
+        <div className="mountain-filter">
+          <div className="page-container">
+            <div className="inner-page" style={style.inner}>
+              <div style={style.card}>
+                <h1>Login</h1>
+                {errors.length > 0 &&
+                  errors.map((error, index) => (
+                    <p key={index} style={{ color: "red" }}>
+                      {error}
+                    </p>
+                  ))}
+                <TextField
+                  label="Email"
+                  type="email"
+                  variant="filled"
+                  color="success"
+                  sx={{ color: "white", width: "250px" }}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <TextField
+                  label="Password"
+                  type="password"
+                  variant="filled"
+                  color="success"
+                  sx={{ color: "white", width: "250px", marginBottom: "40px" }}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <LoadingButton
+                  variant="contained"
+                  component="span"
+                  sx={{ width: "250px" }}
+                  onClick={() => handleSubmit()}
+                  loading={loading}
+                  disabled={loading}
+                  style={style.button}
+                >
+                  Login
+                </LoadingButton>
+                <p style={{ marginBottom: "29px" }}>
+                  No account?{" "}
+                  <a style={{ color: "red" }} href="/register">
+                    Sign up
+                  </a>
+                </p>
+                {/* <p>Or why not login with:</p>
+                <LoadingButton
+                  startIcon={<GoogleIcon />}
+                  variant="contained"
+                  loadingPosition="start"
+                  sx={{ width: "250px", marginBottom: "10px" }}
+                  style={style.buttonGl}
+                  onClick={handleGoogle}
+                >
+                  Google
+                </LoadingButton> */}
+                <a style={{ color: "#3498db" }} href="/forgotten">
+                  Forgotten Password
                 </a>
-              </p>
-              <p>Or why not login with:</p>
-              <LoadingButton
-                startIcon={<GoogleIcon />}
-                variant="contained"
-                loadingPosition="start"
-                sx={{ width: "250px", marginBottom: "10px" }}
-                style={style.buttonGl}
-                onClick={handleGoogle}
-              >
-                Google
-              </LoadingButton>
-              <a style={{ color: "#3498db" }} href="/forgotten">
-                Forgotten Password
-              </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };

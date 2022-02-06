@@ -6,7 +6,7 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signInWithPopup,
+  signInWithRedirect,
   GoogleAuthProvider,
   sendPasswordResetEmail,
 } from "firebase/auth";
@@ -90,7 +90,7 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
         password
       );
 
-      let monogoResponse = await fetch("/api/handler/" + email, {
+      let monogoResponse = await fetch("/api/user/" + email, {
         method: "GET",
       });
       let data = await monogoResponse.json();
@@ -119,10 +119,12 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const res = await signInWithRedirect(auth, provider);
+      JSON.stringify(res)
       const {
         currentUser: { displayName, uid, accessToken, email },
       }: { currentUser: any } = auth;
+     
       setUser({ email, displayName, uid, accessToken });
       return false;
     } catch (err: any) {
@@ -193,7 +195,7 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
       averageVehicle: { avgScore },
     } = car;
     setLoading(true);
-    if(!user.email){
+    if (!user.email) {
       toast.info("Please Login first ", {
         position: "top-right",
         autoClose: 5000,
@@ -205,8 +207,21 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
       });
       return;
     }
+    const foundDuplicate = user.saved.filter((vehicle:any) => vehicle.registration === registration)
+    if(foundDuplicate.length){
+      toast.error("You already have this vehicle saved", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return
+    }
     try {
-      const res = await fetch("/api/handler", {
+      await fetch("/api/user", {
         method: "PUT",
         body: JSON.stringify({
           email: user.email,
@@ -240,7 +255,7 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
         ],
       });
 
-      toast.info("Added", {
+      toast.success("Added", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -275,11 +290,11 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
       primaryColour,
       score,
       avgScore,
-      motTests,
+      mileage,
     } = car;
     setLoading(true);
     try {
-      const res = await fetch("/api/handler", {
+      await fetch("/api/user", {
         method: "DELETE",
         body: JSON.stringify({
           email: user.email,
@@ -291,7 +306,7 @@ export const MainProvider: React.FC<MainContextProps> = ({ children }) => {
           primaryColour,
           score,
           avgScore,
-          mileage: parseInt(motTests[0].odometerValue),
+          mileage,
         }),
       });
 

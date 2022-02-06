@@ -53,15 +53,15 @@ const MotAccordion: React.FC<MotAccordionProps> = ({ mots }) => {
               .sort((a: any, b: any) => (a.type < b.type ? 1 : -1))
               .map((comment: any, index: number) => (
                 <div key={index}>
-                  <div style={{ fontStyle: "bold" }}>{comment.type}</div>
-                  <br />
+                  <div style={{ fontWeight: "bold" }}>{comment.type}</div>
                   <div style={{ fontSize: "14px" }}>{comment.text}</div>
+                  <br />
                 </div>
               ))
           ) : (
-            <div style={{ fontStyle: "bold" }}> No Advisories </div>
+            <div style={{ fontWeight: "bold" }}> No Advisories </div>
           )}
-          <div style={{ paddingTop: "10px", color: "black" }}>
+          <div style={{color: "black" }}>
             Mileage: {odometerValue} {odometerUnit} Mot Test: {motTestNumber}
           </div>
         </AccordionDetails>

@@ -14,6 +14,7 @@ const Saved: React.FC<SavedProps> = () => {
   const style: any = {
     inner: {
       marginBottom: "200px",
+      maxWidth: "700px",
     },
   };
 
@@ -48,17 +49,18 @@ const Saved: React.FC<SavedProps> = () => {
                     setSelectValue(e.target.value);
                     sortSaved(e.target.value);
                   }}
-                  sx={{ backgroundColor: "white !important" }}
+                  sx={{ backgroundColor: "white !important", padding: '2px', borderRadius: '5px' }}
                 >
                   <MenuItem value={0}>
-                    <em>Sort By</em>
+                    Sort By
                   </MenuItem>
                   <MenuItem value={"SH"}>Score (High - Low)</MenuItem>
                   <MenuItem value={"SL"}>Score (Low - High)</MenuItem>
                 </Select>
               </FormControl>
             </div>
-            {user.saved && user.saved.length > 0 &&
+            {user.saved &&
+              user.saved.length > 0 &&
               user.saved.map((vehicle: any, index: number) => (
                 <SavedCard
                   key={index}
@@ -73,7 +75,11 @@ const Saved: React.FC<SavedProps> = () => {
                   mileage={vehicle.mileage}
                 />
               ))}
-            {user.saved && user.saved.length < 1 && <div style={{color: 'white', padding: '10px'}}>No Vehicles Saved</div>}
+            {user.saved && user.saved.length < 1 && (
+              <div style={{ color: "white", padding: "10px" }}>
+                No Vehicles Saved
+              </div>
+            )}
           </div>
         </div>
       </div>

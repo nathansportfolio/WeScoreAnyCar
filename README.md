@@ -40,5 +40,3 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 2. env vars
 
 3. Clean Up
-
-4. Vercel
