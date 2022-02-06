@@ -249,12 +249,12 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     if (params.id) {
       const STAGING = false
       let response = await fetch(
-        STAGING ? "http://localhost:3000/api/vehicles/" + params.id.toString() : "https://we-score-any-car-mjg03dzte-nathansportfolio.vercel.app/api/vehicles/" + params.id.toString(),
+        STAGING ? "http://localhost:3000/api/vehicles/" + params.id.toString() : "https://we-score-any-car-gageclgar-nathansportfolio.vercel.app/api/vehicles/" + params.id.toString(),
         {
           method: "GET",
         }
       );
-
+        
       const { message } = await response.json();
 
       return { props: message };
