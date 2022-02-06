@@ -247,8 +247,9 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   if (params) {
     if (params.id) {
+      const STAGING = false
       let response = await fetch(
-        "/api/vehicles/" + params.id.toString(),
+        STAGING ? "http://localhost:3000/api/vehicles/" + params.id.toString() : "https://wescoreanycar.com/api/vehicles/" + params.id.toString(),
         {
           method: "GET",
         }
