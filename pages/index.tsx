@@ -34,13 +34,15 @@ const Home: React.FC<HomeProps> = () => {
     setLoading(true);
     const STAGING = window.location.hostname === "localhost"
     let response = await fetch(
-      STAGING ? "http://localhost:3000/api/vehicle/" : "https://www.socremycar.com/api/vehicle/" + registration,
+      STAGING ? "http://localhost:3000/api/vehicle/" + registration: "/api/vehicle/" + registration,
       {
         method: "GET",
       }
     );
 
+    console.log('res', response)
     const { message } = await response.json();
+    console.log('res', message)
     if (message.registration) {
       event(message.registration)
       router.push(`/score/${registration.replace(/\s/g, "")}`);
