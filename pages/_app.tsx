@@ -36,6 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           name="description"
           content="Score your vehicle, and find out how your car compares to others. It's like a credit score for your car."
         />
+        <meta name="google-site-verification" content="XwHdNtjCdGqANWVn6HxWIQ5hKzEH_aiwi8grd5BJZsI" />
         </Head>
     <MainProvider>
 
