@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import * as ga from "../services/ga";
+import {  Head } from "next/document"
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -27,10 +28,21 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [router.events]);
 
   return (
+    <>
+     <Head>
+        <title>WeScoreAnyCar</title>
+        <meta property="og:title" content="WeScoreAnyCar" key="home" />
+        <meta
+          name="description"
+          content="Score your vehicle, and find out how your car compares to others. It's like a credit score for your car."
+        />
+        </Head>
     <MainProvider>
+
       <ToastContainer />
       <SiteLayout content={<Component {...pageProps} />} />
     </MainProvider>
+    </>
   );
 }
 
