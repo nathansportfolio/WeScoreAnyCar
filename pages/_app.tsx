@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import * as ga from "../services/ga";
-import {  Head } from "next/document"
+import Head from "next/head"
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -27,9 +27,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     };
   }, [router.events]);
 
-  return (
-    <>
-     <Head>
+  return (<>
+  <Head>
         <title>WeScoreAnyCar</title>
         <meta property="og:title" content="WeScoreAnyCar" key="home" />
         <meta
@@ -39,11 +38,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="google-site-verification" content="XwHdNtjCdGqANWVn6HxWIQ5hKzEH_aiwi8grd5BJZsI" />
         </Head>
     <MainProvider>
-
+    
       <ToastContainer />
       <SiteLayout content={<Component {...pageProps} />} />
-    </MainProvider>
-    </>
+    </MainProvider></>
   );
 }
 

@@ -1,75 +1,153 @@
 "use strict";
-/*
- * ATTENTION: An "eval-source-map" devtool has been used.
- * This devtool is neither made for production nor for readable output files.
- * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
- * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
- * or disable the default devtool with "devtool: false".
- * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
- */
 (() => {
 var exports = {};
-exports.id = "pages/api/vehicles/[registration]";
-exports.ids = ["pages/api/vehicles/[registration]"];
+exports.id = 498;
+exports.ids = [498];
 exports.modules = {
 
-/***/ "axios":
-/*!************************!*\
-  !*** external "axios" ***!
-  \************************/
+/***/ 2167:
 /***/ ((module) => {
 
 module.exports = require("axios");
 
 /***/ }),
 
-/***/ "mongodb":
-/*!**************************!*\
-  !*** external "mongodb" ***!
-  \**************************/
+/***/ 8013:
 /***/ ((module) => {
 
 module.exports = require("mongodb");
 
 /***/ }),
 
-/***/ "./pages/api/vehicles/[registration].js":
-/*!**********************************************!*\
-  !*** ./pages/api/vehicles/[registration].js ***!
-  \**********************************************/
+/***/ 2325:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ handler)\n/* harmony export */ });\n/* harmony import */ var _services_motCalls__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../services/motCalls */ \"./services/motCalls.ts?a0b6\");\n/* harmony import */ var _services_taxApi__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../services/taxApi */ \"./services/taxApi.ts\");\n/* harmony import */ var _services_newMongo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../services/newMongo */ \"./services/newMongo.js\");\n\n\n\nasync function handler(req, res) {\n    // switch the methods\n    switch(req.method){\n        case \"GET\":\n            {\n                return getVehicleData(req, res);\n            }\n    }\n};\nfunction generateScrapped(cleanedMotVehicles) {\n    const scrappedTotal = cleanedMotVehicles.filter((vehicle)=>vehicle.scrapped > 65000\n    );\n    let scrappedTotalNum = 0;\n    scrappedTotal.map((vehicle)=>{\n        scrappedTotalNum += vehicle.scrapped;\n    });\n    const completeScrappedValue = scrappedTotalNum / scrappedTotal.length;\n    const numberOfScrapped = scrappedTotal.length;\n    return {\n        completeScrappedValue,\n        numberOfScrapped\n    };\n}\nfunction generateMotScoresByYear(mots) {\n    let scoreGen = 0;\n    return mots.map((mot, index)=>{\n        const currentYear = mot.completedDate.split(\".\")[0];\n        let nextYear;\n        if (mots[index + 1]) {\n            nextYear = mots[index + 1].completedDate.split(\".\")[0];\n        } else {\n            return {\n                ...mot,\n                scoreGen,\n                completedDate: currentYear\n            };\n        }\n        if (currentYear === nextYear) {\n            scoreGen += mot.scoreGen;\n            return false;\n        } else {\n            return {\n                ...mot,\n                scoreGen,\n                completedDate: currentYear\n            };\n        }\n    }).filter((mot)=>mot !== false\n    );\n}\nfunction generateAverageMots(motYears, cleanedMotVehicles) {\n    return motYears.map((year)=>{\n        const collectedMotsOneYear = cleanedMotVehicles.map((car)=>({\n                ...car,\n                mots: car.mots.filter((mot)=>mot.completedDate === year\n                )\n            })\n        );\n        let sumOfMotScores = 0;\n        collectedMotsOneYear.forEach((car)=>{\n            if (car.mots[0]) sumOfMotScores += car.mots[0].score;\n        });\n        return {\n            completedDate: year,\n            score: parseFloat((sumOfMotScores / collectedMotsOneYear.length).toFixed(2))\n        };\n    });\n}\nasync function getVehicleData(req, res) {\n    const { registration  } = req.query;\n    const [motResponse, taxResponse, connected] = await Promise.all([\n        (0,_services_motCalls__WEBPACK_IMPORTED_MODULE_0__.MotApiCall)(registration),\n        (0,_services_taxApi__WEBPACK_IMPORTED_MODULE_1__.taxApi)(registration),\n        (0,_services_newMongo__WEBPACK_IMPORTED_MODULE_2__[\"default\"])(), \n    ]);\n    const response = {\n        ...motResponse,\n        ...taxResponse\n    };\n    const vehicles = await connected.db.collection(\"vehicles\").find({\n        make: response.make,\n        model: response.model,\n        fuelType: response.fuelType.charAt(0).toUpperCase() + response.fuelType.slice(1).toLowerCase()\n    }).limit(5000).toArray();\n    const cleanedMotVehicles = vehicles.map((vehicle)=>({\n            ...vehicle,\n            mots: JSON.parse(vehicle.mots).filter((mot)=>mot !== false\n            )\n        })\n    );\n    const { completeScrappedValue , numberOfScrapped  } = generateScrapped(cleanedMotVehicles);\n    const collectMotsScoresByYear = generateMotScoresByYear(response.motTests);\n    const motYears = collectMotsScoresByYear.map((mot)=>mot.completedDate\n    );\n    const collection = generateAverageMots(motYears, cleanedMotVehicles);\n    let avgScoreCounter = 0;\n    collection.map((mot)=>avgScoreCounter += mot.score\n    );\n    const props = {\n        vehicleString: {\n            ...response,\n            motChartTests: collectMotsScoresByYear\n        },\n        averageVehicle: {\n            averageMots: collection,\n            avgScore: parseFloat((avgScoreCounter / collection.length).toFixed(2)),\n            avgScrapped: completeScrappedValue.toFixed(0),\n            numberOfScrapped\n        }\n    };\n    return res.json({\n        message: JSON.parse(JSON.stringify(props)),\n        success: true\n    });\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,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QUNxQixPQUFPLENBQUMsQ0FBQztZQUM1Q25CLGdCQUFnQjtRQUNsQixDQUFDO0lBQ0gsQ0FBQztJQUVELE1BQU0sQ0FBQ2IsR0FBRyxDQUFDa0UsSUFBSSxDQUFDLENBQUM7UUFDZkMsT0FBTyxFQUFFYixJQUFJLENBQUNDLEtBQUssQ0FBQ0QsSUFBSSxDQUFDYyxTQUFTLENBQUNULEtBQUs7UUFDeENVLE9BQU8sRUFBRSxJQUFJO0lBQ2YsQ0FBQztBQUNILENBQUMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly93ZXNjb3JlYW55Y2FyLy4vcGFnZXMvYXBpL3ZlaGljbGVzL1tyZWdpc3RyYXRpb25dLmpzPzFlNDYiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgTW90QXBpQ2FsbCB9IGZyb20gXCIuLi8uLi8uLi9zZXJ2aWNlcy9tb3RDYWxsc1wiO1xuaW1wb3J0IHsgdGF4QXBpIH0gZnJvbSBcIi4uLy4uLy4uL3NlcnZpY2VzL3RheEFwaVwiO1xuaW1wb3J0IGNvbm5lY3RUb0RhdGFiYXNlIGZyb20gXCIuLi8uLi8uLi9zZXJ2aWNlcy9uZXdNb25nb1wiO1xuZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gaGFuZGxlcihyZXEsIHJlcykge1xuICAvLyBzd2l0Y2ggdGhlIG1ldGhvZHNcbiAgc3dpdGNoIChyZXEubWV0aG9kKSB7XG4gICAgY2FzZSBcIkdFVFwiOiB7XG4gICAgICByZXR1cm4gZ2V0VmVoaWNsZURhdGEocmVxLCByZXMpO1xuICAgIH1cbiAgfVxufVxuXG5mdW5jdGlvbiBnZW5lcmF0ZVNjcmFwcGVkKGNsZWFuZWRNb3RWZWhpY2xlcykge1xuICBjb25zdCBzY3JhcHBlZFRvdGFsID0gY2xlYW5lZE1vdFZlaGljbGVzLmZpbHRlcihcbiAgICAodmVoaWNsZSkgPT4gdmVoaWNsZS5zY3JhcHBlZCA+IDY1MDAwXG4gICk7XG4gIGxldCBzY3JhcHBlZFRvdGFsTnVtID0gMDtcbiAgc2NyYXBwZWRUb3RhbC5tYXAoKHZlaGljbGUpID0+IHtcbiAgICBzY3JhcHBlZFRvdGFsTnVtICs9IHZlaGljbGUuc2NyYXBwZWQ7XG4gIH0pO1xuICBjb25zdCBjb21wbGV0ZVNjcmFwcGVkVmFsdWUgPSBzY3JhcHBlZFRvdGFsTnVtIC8gc2NyYXBwZWRUb3RhbC5sZW5ndGg7XG4gIGNvbnN0IG51bWJlck9mU2NyYXBwZWQgPSBzY3JhcHBlZFRvdGFsLmxlbmd0aDtcbiAgcmV0dXJuIHsgY29tcGxldGVTY3JhcHBlZFZhbHVlLCBudW1iZXJPZlNjcmFwcGVkIH07XG59XG5cbmZ1bmN0aW9uIGdlbmVyYXRlTW90U2NvcmVzQnlZZWFyKG1vdHMpIHtcbiAgbGV0IHNjb3JlR2VuID0gMDtcbiAgcmV0dXJuIG1vdHNcbiAgICAubWFwKChtb3QsIGluZGV4KSA9PiB7XG4gICAgICBjb25zdCBjdXJyZW50WWVhciA9IG1vdC5jb21wbGV0ZWREYXRlLnNwbGl0KFwiLlwiKVswXTtcbiAgICAgIGxldCBuZXh0WWVhcjtcbiAgICAgIGlmIChtb3RzW2luZGV4ICsgMV0pIHtcbiAgICAgICAgbmV4dFllYXIgPSBtb3RzW2luZGV4ICsgMV0uY29tcGxldGVkRGF0ZS5zcGxpdChcIi5cIilbMF07XG4gICAgICB9IGVsc2Uge1xuICAgICAgICByZXR1cm4geyAuLi5tb3QsIHNjb3JlR2VuLCBjb21wbGV0ZWREYXRlOiBjdXJyZW50WWVhciB9O1xuICAgICAgfVxuICAgICAgaWYgKGN1cnJlbnRZZWFyID09PSBuZXh0WWVhcikge1xuICAgICAgICBzY29yZUdlbiArPSBtb3Quc2NvcmVHZW47XG4gICAgICAgIHJldHVybiBmYWxzZTtcbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIHJldHVybiB7IC4uLm1vdCwgc2NvcmVHZW4sIGNvbXBsZXRlZERhdGU6IGN1cnJlbnRZZWFyIH07XG4gICAgICB9XG4gICAgfSlcbiAgICAuZmlsdGVyKChtb3QpID0+IG1vdCAhPT0gZmFsc2UpO1xufVxuXG5mdW5jdGlvbiBnZW5lcmF0ZUF2ZXJhZ2VNb3RzKG1vdFllYXJzLCBjbGVhbmVkTW90VmVoaWNsZXMpIHtcbiAgcmV0dXJuIG1vdFllYXJzLm1hcCgoeWVhcikgPT4ge1xuICAgIGNvbnN0IGNvbGxlY3RlZE1vdHNPbmVZZWFyID0gY2xlYW5lZE1vdFZlaGljbGVzLm1hcCgoY2FyKSA9PiAoe1xuICAgICAgLi4uY2FyLFxuICAgICAgbW90czogY2FyLm1vdHMuZmlsdGVyKChtb3QpID0+IG1vdC5jb21wbGV0ZWREYXRlID09PSB5ZWFyKSxcbiAgICB9KSk7XG4gICAgbGV0IHN1bU9mTW90U2NvcmVzID0gMDtcbiAgICBjb2xsZWN0ZWRNb3RzT25lWWVhci5mb3JFYWNoKChjYXIpID0+IHtcbiAgICAgIGlmIChjYXIubW90c1swXSkgc3VtT2ZNb3RTY29yZXMgKz0gY2FyLm1vdHNbMF0uc2NvcmU7XG4gICAgfSk7XG4gICAgcmV0dXJuIHtcbiAgICAgIGNvbXBsZXRlZERhdGU6IHllYXIsXG4gICAgICBzY29yZTogcGFyc2VGbG9hdChcbiAgICAgICAgKHN1bU9mTW90U2NvcmVzIC8gY29sbGVjdGVkTW90c09uZVllYXIubGVuZ3RoKS50b0ZpeGVkKDIpXG4gICAgICApLFxuICAgIH07XG4gIH0pO1xufVxuXG5hc3luYyBmdW5jdGlvbiBnZXRWZWhpY2xlRGF0YShyZXEsIHJlcykge1xuICBjb25zdCB7IHJlZ2lzdHJhdGlvbiB9ID0gcmVxLnF1ZXJ5O1xuICBjb25zdCBbbW90UmVzcG9uc2UsIHRheFJlc3BvbnNlLCBjb25uZWN0ZWRdID0gYXdhaXQgUHJvbWlzZS5hbGwoW1xuICAgIE1vdEFwaUNhbGwocmVnaXN0cmF0aW9uKSxcbiAgICB0YXhBcGkocmVnaXN0cmF0aW9uKSxcbiAgICBjb25uZWN0VG9EYXRhYmFzZSgpLFxuICBdKTtcbiAgY29uc3QgcmVzcG9uc2UgPSB7IC4uLm1vdFJlc3BvbnNlLCAuLi50YXhSZXNwb25zZSB9O1xuICBjb25zdCB2ZWhpY2xlcyA9IGF3YWl0IGNvbm5lY3RlZC5kYlxuICAgIC5jb2xsZWN0aW9uKFwidmVoaWNsZXNcIilcbiAgICAuZmluZCh7XG4gICAgICBtYWtlOiByZXNwb25zZS5tYWtlLFxuICAgICAgbW9kZWw6IHJlc3BvbnNlLm1vZGVsLFxuICAgICAgZnVlbFR5cGU6XG4gICAgICAgIHJlc3BvbnNlLmZ1ZWxUeXBlLmNoYXJBdCgwKS50b1VwcGVyQ2FzZSgpICtcbiAgICAgICAgcmVzcG9uc2UuZnVlbFR5cGUuc2xpY2UoMSkudG9Mb3dlckNhc2UoKSxcbiAgICB9KVxuICAgIC5saW1pdCg1MDAwKVxuICAgIC50b0FycmF5KCk7XG5cbiAgY29uc3QgY2xlYW5lZE1vdFZlaGljbGVzID0gdmVoaWNsZXMubWFwKCh2ZWhpY2xlKSA9PiAoe1xuICAgIC4uLnZlaGljbGUsXG4gICAgbW90czogSlNPTi5wYXJzZSh2ZWhpY2xlLm1vdHMpLmZpbHRlcigobW90KSA9PiBtb3QgIT09IGZhbHNlKSxcbiAgfSkpO1xuXG4gIGNvbnN0IHsgY29tcGxldGVTY3JhcHBlZFZhbHVlLCBudW1iZXJPZlNjcmFwcGVkIH0gPVxuICAgIGdlbmVyYXRlU2NyYXBwZWQoY2xlYW5lZE1vdFZlaGljbGVzKTtcbiAgY29uc3QgY29sbGVjdE1vdHNTY29yZXNCeVllYXIgPSBnZW5lcmF0ZU1vdFNjb3Jlc0J5WWVhcihyZXNwb25zZS5tb3RUZXN0cyk7XG4gIGNvbnN0IG1vdFllYXJzID0gY29sbGVjdE1vdHNTY29yZXNCeVllYXIubWFwKChtb3QpID0+IG1vdC5jb21wbGV0ZWREYXRlKTtcbiAgY29uc3QgY29sbGVjdGlvbiA9IGdlbmVyYXRlQXZlcmFnZU1vdHMobW90WWVhcnMsIGNsZWFuZWRNb3RWZWhpY2xlcyk7XG5cbiAgbGV0IGF2Z1Njb3JlQ291bnRlciA9IDA7XG4gIGNvbGxlY3Rpb24ubWFwKChtb3QpID0+IChhdmdTY29yZUNvdW50ZXIgKz0gbW90LnNjb3JlKSk7XG5cbiAgY29uc3QgcHJvcHMgPSB7XG4gICAgdmVoaWNsZVN0cmluZzogeyAuLi5yZXNwb25zZSwgbW90Q2hhcnRUZXN0czogY29sbGVjdE1vdHNTY29yZXNCeVllYXIgfSxcbiAgICBhdmVyYWdlVmVoaWNsZToge1xuICAgICAgYXZlcmFnZU1vdHM6IGNvbGxlY3Rpb24sXG4gICAgICBhdmdTY29yZTogcGFyc2VGbG9hdCgoYXZnU2NvcmVDb3VudGVyIC8gY29sbGVjdGlvbi5sZW5ndGgpLnRvRml4ZWQoMikpLFxuICAgICAgYXZnU2NyYXBwZWQ6IGNvbXBsZXRlU2NyYXBwZWRWYWx1ZS50b0ZpeGVkKDApLFxuICAgICAgbnVtYmVyT2ZTY3JhcHBlZCxcbiAgICB9LFxuICB9O1xuXG4gIHJldHVybiByZXMuanNvbih7XG4gICAgbWVzc2FnZTogSlNPTi5wYXJzZShKU09OLnN0cmluZ2lmeShwcm9wcykpLFxuICAgIHN1Y2Nlc3M6IHRydWUsXG4gIH0pO1xufVxuIl0sIm5hbWVzIjpbIk1vdEFwaUNhbGwiLCJ0YXhBcGkiLCJjb25uZWN0VG9EYXRhYmFzZSIsImhhbmRsZXIiLCJyZXEiLCJyZXMiLCJtZXRob2QiLCJnZXRWZWhpY2xlRGF0YSIsImdlbmVyYXRlU2NyYXBwZWQiLCJjbGVhbmVkTW90VmVoaWNsZXMiLCJzY3JhcHBlZFRvdGFsIiwiZmlsdGVyIiwidmVoaWNsZSIsInNjcmFwcGVkIiwic2NyYXBwZWRUb3RhbE51bSIsIm1hcCIsImNvbXBsZXRlU2NyYXBwZWRWYWx1ZSIsImxlbmd0aCIsIm51bWJlck9mU2NyYXBwZWQiLCJnZW5lcmF0ZU1vdFNjb3Jlc0J5WWVhciIsIm1vdHMiLCJzY29yZUdlbiIsIm1vdCIsImluZGV4IiwiY3VycmVudFllYXIiLCJjb21wbGV0ZWREYXRlIiwic3BsaXQiLCJuZXh0WWVhciIsImdlbmVyYXRlQXZlcmFnZU1vdHMiLCJtb3RZZWFycyIsInllYXIiLCJjb2xsZWN0ZWRNb3RzT25lWWVhciIsImNhciIsInN1bU9mTW90U2NvcmVzIiwiZm9yRWFjaCIsInNjb3JlIiwicGFyc2VGbG9hdCIsInRvRml4ZWQiLCJyZWdpc3RyYXRpb24iLCJxdWVyeSIsIm1vdFJlc3BvbnNlIiwidGF4UmVzcG9uc2UiLCJjb25uZWN0ZWQiLCJQcm9taXNlIiwiYWxsIiwicmVzcG9uc2UiLCJ2ZWhpY2xlcyIsImRiIiwiY29sbGVjdGlvbiIsImZpbmQiLCJtYWtlIiwibW9kZWwiLCJmdWVsVHlwZSIsImNoYXJBdCIsInRvVXBwZXJDYXNlIiwic2xpY2UiLCJ0b0xvd2VyQ2FzZSIsImxpbWl0IiwidG9BcnJheSIsIkpTT04iLCJwYXJzZSIsImNvbGxlY3RNb3RzU2NvcmVzQnlZZWFyIiwibW90VGVzdHMiLCJhdmdTY29yZUNvdW50ZXIiLCJwcm9wcyIsInZlaGljbGVTdHJpbmciLCJtb3RDaGFydFRlc3RzIiwiYXZlcmFnZVZlaGljbGUiLCJhdmVyYWdlTW90cyIsImF2Z1Njb3JlIiwiYXZnU2NyYXBwZWQiLCJqc29uIiwibWVzc2FnZSIsInN0cmluZ2lmeSIsInN1Y2Nlc3MiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./pages/api/vehicles/[registration].js\n");
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ handler)
+/* harmony export */ });
+/* harmony import */ var _services_motCalls__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(611);
+/* harmony import */ var _services_taxApi__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9677);
+/* harmony import */ var _services_newMongo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1244);
 
-/***/ }),
 
-/***/ "./services/motCalls.ts?a0b6":
-/*!******************************!*\
-  !*** ./services/motCalls.ts ***!
-  \******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"MotApiCall\": () => (/* binding */ MotApiCall),\n/* harmony export */   \"getScores\": () => (/* binding */ getScores)\n/* harmony export */ });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"axios\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n\nconst MOT_API_ADDRESS = \"https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?registration=\";\nconst TOKEN = \"mc5vxMFDUn8GDjWVHfW636FgFPJ7XmsCkQ1OoBdd\";\nconst HEADERS = {\n    headers: {\n        \"x-api-key\": TOKEN,\n        Accept: \"application/json+v6\",\n        \"Content-Type\": \"applicaiton/json\"\n    }\n};\nconst MotApiCall = async (registration)=>{\n    try {\n        const { data  } = await axios__WEBPACK_IMPORTED_MODULE_0___default().get(MOT_API_ADDRESS + registration, HEADERS);\n        const vehicle = data[0];\n        const veh = getScores(vehicle);\n        return veh;\n    } catch (err) {\n        console.log(\"error\", err);\n        return {\n            registration: \"\",\n            engineSize: \"\",\n            fuelType: \"\",\n            make: \"\",\n            model: \"\",\n            motTests: [],\n            primaryColour: \"\",\n            firstUsedDate: \"\",\n            score: 100\n        };\n    }\n};\nconst getScores = (vehicle)=>{\n    let score = 0;\n    const motTests = vehicle.motTests.map((mot)=>{\n        let advisories = 0;\n        let dangerous = 0;\n        let fail = 0;\n        let major = 0;\n        let minor = 0;\n        let user = 0;\n        let prs = 0;\n        mot.rfrAndComments.map((comment)=>{\n            if (comment.type.toLowerCase() === \"advisory\") advisories++;\n            if (comment.type.toLowerCase() === \"fail\") fail++;\n            if (comment.type.toLowerCase() === \"major\") major++;\n            if (comment.type.toLowerCase() === \"minor\") minor++;\n            if (comment.type.toLowerCase() === \"user entered\") user++;\n            if (comment.type.toLowerCase() === \"prs\") prs++;\n            if (comment.type.toLowerCase() === \"dangerous\") dangerous++;\n            else if (comment.dangerous) dangerous++;\n        });\n        const motScore = calculateScore(advisories, fail, dangerous, major, minor, user, prs);\n        score += motScore;\n        return {\n            ...mot,\n            motScore\n        };\n    });\n    const currentYear = new Date().getFullYear();\n    const age = currentYear - vehicle.firstUsedDate.split(\".\")[0];\n    return {\n        ...vehicle,\n        motTests,\n        score: parseFloat((score / age).toFixed(2))\n    };\n};\nconst calculateScore = (advisories, fail, dangerous, major, minor, user, prs)=>{\n    return advisories * 0.5 + minor + major * 1.5 + dangerous * 3 + user + fail * 2 + prs;\n};\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,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QUVBLFNBQVM7UUFDdkMsQ0FBQztRQUVELEtBQUssQ0FBQ1UsUUFBUSxHQUFHQyxjQUFjLENBQzdCWixVQUFVLEVBQ1ZFLElBQUksRUFDSkQsU0FBUyxFQUNURSxLQUFLLEVBQ0xDLEtBQUssRUFDTEMsSUFBSSxFQUNKQyxHQUFHO1FBRUxULEtBQUssSUFBSWMsUUFBUTtRQUVqQixNQUFNLENBQUMsQ0FBQztlQUFJWixHQUFHO1lBQUVZLFFBQVE7UUFBQyxDQUFDO0lBQzdCLENBQUM7SUFDRCxLQUFLLENBQUNFLFdBQVcsR0FBRyxHQUFHLENBQUNDLElBQUksR0FBR0MsV0FBVztJQUMxQyxLQUFLLENBQUNDLEdBQUcsR0FBR0gsV0FBVyxHQUFHN0IsT0FBTyxDQUFDWSxhQUFhLENBQUNxQixLQUFLLENBQUMsQ0FBRyxJQUFFLENBQUM7SUFDNUQsTUFBTSxDQUFDLENBQUM7V0FDSGpDLE9BQU87UUFDVlUsUUFBUTtRQUNSRyxLQUFLLEVBQUVxQixVQUFVLEVBQUVyQixLQUFLLEdBQUdtQixHQUFHLEVBQUVHLE9BQU8sQ0FBQyxDQUFDO0lBQzNDLENBQUM7QUFDSCxDQUFDO0FBRUQsS0FBSyxDQUFDUCxjQUFjLElBQ2xCWixVQUFrQixFQUNsQkUsSUFBWSxFQUNaRCxTQUFpQixFQUNqQkUsS0FBYSxFQUNiQyxLQUFhLEVBQ2JDLElBQVksRUFDWkMsR0FBVyxHQUNSLENBQUM7SUFDSixNQUFNLENBQ0pOLFVBQVUsR0FBRyxHQUFHLEdBQ2hCSSxLQUFLLEdBQ0xELEtBQUssR0FBRyxHQUFHLEdBQ1hGLFNBQVMsR0FBRyxDQUFDLEdBQ2JJLElBQUksR0FDSkgsSUFBSSxHQUFHLENBQUMsR0FDUkksR0FBRztBQUVQLENBQUMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly93ZXNjb3JlYW55Y2FyLy4vc2VydmljZXMvbW90Q2FsbHMudHM/NTQxNiJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgYXhpb3MgZnJvbSBcImF4aW9zXCI7XG5cbmNvbnN0IE1PVF9BUElfQUREUkVTUyA9XG4gIFwiaHR0cHM6Ly9iZXRhLmNoZWNrLW1vdC5zZXJ2aWNlLmdvdi51ay90cmFkZS92ZWhpY2xlcy9tb3QtdGVzdHM/cmVnaXN0cmF0aW9uPVwiO1xuY29uc3QgVE9LRU4gPSBcIm1jNXZ4TUZEVW44R0RqV1ZIZlc2MzZGZ0ZQSjdYbXNDa1ExT29CZGRcIjtcbmNvbnN0IEhFQURFUlMgPSB7XG4gIGhlYWRlcnM6IHtcbiAgICBcIngtYXBpLWtleVwiOiBUT0tFTixcbiAgICBBY2NlcHQ6IFwiYXBwbGljYXRpb24vanNvbit2NlwiLFxuICAgIFwiQ29udGVudC1UeXBlXCI6IFwiYXBwbGljYWl0b24vanNvblwiLFxuICB9LFxufTtcblxuZXhwb3J0IGNvbnN0IE1vdEFwaUNhbGwgPSBhc3luYyAocmVnaXN0cmF0aW9uOiBzdHJpbmcpID0+IHtcbiAgdHJ5IHtcbiAgICBjb25zdCB7IGRhdGEgfSA9IGF3YWl0IGF4aW9zLmdldChNT1RfQVBJX0FERFJFU1MgKyByZWdpc3RyYXRpb24sIEhFQURFUlMpO1xuICAgIGNvbnN0IHZlaGljbGUgPSBkYXRhWzBdO1xuICAgIGNvbnN0IHZlaCA9IGdldFNjb3Jlcyh2ZWhpY2xlKTtcblxuICAgIHJldHVybiB2ZWg7XG4gIH0gY2F0Y2ggKGVycikge1xuICAgIGNvbnNvbGUubG9nKFwiZXJyb3JcIiwgZXJyKTtcbiAgICByZXR1cm4ge1xuICAgICAgcmVnaXN0cmF0aW9uOiBcIlwiLFxuICAgICAgZW5naW5lU2l6ZTogXCJcIixcbiAgICAgIGZ1ZWxUeXBlOiBcIlwiLFxuICAgICAgbWFrZTogXCJcIixcbiAgICAgIG1vZGVsOiBcIlwiLFxuICAgICAgbW90VGVzdHM6IFtdLFxuICAgICAgcHJpbWFyeUNvbG91cjogXCJcIixcbiAgICAgIGZpcnN0VXNlZERhdGU6IFwiXCIsXG4gICAgICBzY29yZTogMTAwLFxuICAgIH07XG4gIH1cbn07XG5cbmV4cG9ydCBjb25zdCBnZXRTY29yZXMgPSAodmVoaWNsZTogYW55KSA9PiB7XG4gIGxldCBzY29yZSA9IDA7XG4gIGNvbnN0IG1vdFRlc3RzID0gdmVoaWNsZS5tb3RUZXN0cy5tYXAoKG1vdDogYW55KSA9PiB7XG4gICAgbGV0IGFkdmlzb3JpZXMgPSAwO1xuICAgIGxldCBkYW5nZXJvdXMgPSAwO1xuICAgIGxldCBmYWlsID0gMDtcbiAgICBsZXQgbWFqb3IgPSAwO1xuICAgIGxldCBtaW5vciA9IDA7XG4gICAgbGV0IHVzZXIgPSAwO1xuICAgIGxldCBwcnMgPSAwO1xuXG4gICAgbW90LnJmckFuZENvbW1lbnRzLm1hcCgoY29tbWVudDogYW55KSA9PiB7XG4gICAgICBpZiAoY29tbWVudC50eXBlLnRvTG93ZXJDYXNlKCkgPT09IFwiYWR2aXNvcnlcIikgYWR2aXNvcmllcysrO1xuICAgICAgaWYgKGNvbW1lbnQudHlwZS50b0xvd2VyQ2FzZSgpID09PSBcImZhaWxcIikgZmFpbCsrO1xuICAgICAgaWYgKGNvbW1lbnQudHlwZS50b0xvd2VyQ2FzZSgpID09PSBcIm1ham9yXCIpIG1ham9yKys7XG4gICAgICBpZiAoY29tbWVudC50eXBlLnRvTG93ZXJDYXNlKCkgPT09IFwibWlub3JcIikgbWlub3IrKztcbiAgICAgIGlmIChjb21tZW50LnR5cGUudG9Mb3dlckNhc2UoKSA9PT0gXCJ1c2VyIGVudGVyZWRcIikgdXNlcisrO1xuICAgICAgaWYgKGNvbW1lbnQudHlwZS50b0xvd2VyQ2FzZSgpID09PSBcInByc1wiKSBwcnMrKztcbiAgICAgIGlmIChjb21tZW50LnR5cGUudG9Mb3dlckNhc2UoKSA9PT0gXCJkYW5nZXJvdXNcIikgZGFuZ2Vyb3VzKys7XG4gICAgICBlbHNlIGlmIChjb21tZW50LmRhbmdlcm91cykgZGFuZ2Vyb3VzKys7XG4gICAgfSk7XG5cbiAgICBjb25zdCBtb3RTY29yZSA9IGNhbGN1bGF0ZVNjb3JlKFxuICAgICAgYWR2aXNvcmllcyxcbiAgICAgIGZhaWwsXG4gICAgICBkYW5nZXJvdXMsXG4gICAgICBtYWpvcixcbiAgICAgIG1pbm9yLFxuICAgICAgdXNlcixcbiAgICAgIHByc1xuICAgICk7XG4gICAgc2NvcmUgKz0gbW90U2NvcmU7XG5cbiAgICByZXR1cm4geyAuLi5tb3QsIG1vdFNjb3JlIH07XG4gIH0pO1xuICBjb25zdCBjdXJyZW50WWVhciA9IG5ldyBEYXRlKCkuZ2V0RnVsbFllYXIoKTtcbiAgY29uc3QgYWdlID0gY3VycmVudFllYXIgLSB2ZWhpY2xlLmZpcnN0VXNlZERhdGUuc3BsaXQoXCIuXCIpWzBdO1xuICByZXR1cm4ge1xuICAgIC4uLnZlaGljbGUsXG4gICAgbW90VGVzdHMsXG4gICAgc2NvcmU6IHBhcnNlRmxvYXQoKHNjb3JlIC8gYWdlKS50b0ZpeGVkKDIpKSxcbiAgfTtcbn07XG5cbmNvbnN0IGNhbGN1bGF0ZVNjb3JlID0gKFxuICBhZHZpc29yaWVzOiBudW1iZXIsXG4gIGZhaWw6IG51bWJlcixcbiAgZGFuZ2Vyb3VzOiBudW1iZXIsXG4gIG1ham9yOiBudW1iZXIsXG4gIG1pbm9yOiBudW1iZXIsXG4gIHVzZXI6IG51bWJlcixcbiAgcHJzOiBudW1iZXJcbikgPT4ge1xuICByZXR1cm4gKFxuICAgIGFkdmlzb3JpZXMgKiAwLjUgK1xuICAgIG1pbm9yICtcbiAgICBtYWpvciAqIDEuNSArXG4gICAgZGFuZ2Vyb3VzICogMyArXG4gICAgdXNlciArXG4gICAgZmFpbCAqIDIgK1xuICAgIHByc1xuICApO1xufTtcbiJdLCJuYW1lcyI6WyJheGlvcyIsIk1PVF9BUElfQUREUkVTUyIsIlRPS0VOIiwiSEVBREVSUyIsImhlYWRlcnMiLCJBY2NlcHQiLCJNb3RBcGlDYWxsIiwicmVnaXN0cmF0aW9uIiwiZGF0YSIsImdldCIsInZlaGljbGUiLCJ2ZWgiLCJnZXRTY29yZXMiLCJlcnIiLCJjb25zb2xlIiwibG9nIiwiZW5naW5lU2l6ZSIsImZ1ZWxUeXBlIiwibWFrZSIsIm1vZGVsIiwibW90VGVzdHMiLCJwcmltYXJ5Q29sb3VyIiwiZmlyc3RVc2VkRGF0ZSIsInNjb3JlIiwibWFwIiwibW90IiwiYWR2aXNvcmllcyIsImRhbmdlcm91cyIsImZhaWwiLCJtYWpvciIsIm1pbm9yIiwidXNlciIsInBycyIsInJmckFuZENvbW1lbnRzIiwiY29tbWVudCIsInR5cGUiLCJ0b0xvd2VyQ2FzZSIsIm1vdFNjb3JlIiwiY2FsY3VsYXRlU2NvcmUiLCJjdXJyZW50WWVhciIsIkRhdGUiLCJnZXRGdWxsWWVhciIsImFnZSIsInNwbGl0IiwicGFyc2VGbG9hdCIsInRvRml4ZWQiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./services/motCalls.ts?a0b6\n");
+async function handler(req, res) {
+    // switch the methods
+    switch(req.method){
+        case "GET":
+            {
+                return getVehicleData(req, res);
+            }
+    }
+};
+function generateScrapped(cleanedMotVehicles) {
+    const scrappedTotal = cleanedMotVehicles.filter((vehicle)=>vehicle.scrapped > 65000
+    );
+    let scrappedTotalNum = 0;
+    scrappedTotal.map((vehicle)=>{
+        scrappedTotalNum += vehicle.scrapped;
+    });
+    const completeScrappedValue = scrappedTotalNum / scrappedTotal.length;
+    const numberOfScrapped = scrappedTotal.length;
+    return {
+        completeScrappedValue,
+        numberOfScrapped
+    };
+}
+function generateMotScoresByYear(mots) {
+    let scoreGen = 0;
+    return mots.map((mot, index)=>{
+        const currentYear = mot.completedDate.split(".")[0];
+        let nextYear;
+        if (mots[index + 1]) {
+            nextYear = mots[index + 1].completedDate.split(".")[0];
+        } else {
+            return {
+                ...mot,
+                scoreGen,
+                completedDate: currentYear
+            };
+        }
+        if (currentYear === nextYear) {
+            scoreGen += mot.scoreGen;
+            return false;
+        } else {
+            return {
+                ...mot,
+                scoreGen,
+                completedDate: currentYear
+            };
+        }
+    }).filter((mot)=>mot !== false
+    );
+}
+function generateAverageMots(motYears, cleanedMotVehicles) {
+    return motYears.map((year)=>{
+        const collectedMotsOneYear = cleanedMotVehicles.map((car)=>({
+                ...car,
+                mots: car.mots.filter((mot)=>mot.completedDate === year
+                )
+            })
+        );
+        let sumOfMotScores = 0;
+        collectedMotsOneYear.forEach((car)=>{
+            if (car.mots[0]) sumOfMotScores += car.mots[0].score;
+        });
+        return {
+            completedDate: year,
+            score: parseFloat((sumOfMotScores / collectedMotsOneYear.length).toFixed(2))
+        };
+    });
+}
+async function getVehicleData(req, res) {
+    const { registration  } = req.query;
+    const [motResponse, taxResponse, connected] = await Promise.all([
+        (0,_services_motCalls__WEBPACK_IMPORTED_MODULE_0__/* .MotApiCall */ .t)(registration),
+        (0,_services_taxApi__WEBPACK_IMPORTED_MODULE_1__/* .taxApi */ .o)(registration),
+        (0,_services_newMongo__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z)(), 
+    ]);
+    const response = {
+        ...motResponse,
+        ...taxResponse
+    };
+    const vehicles = await connected.db.collection("vehicles").find({
+        make: response.make,
+        model: response.model,
+        fuelType: response.fuelType.charAt(0).toUpperCase() + response.fuelType.slice(1).toLowerCase()
+    }).limit(5000).toArray();
+    const cleanedMotVehicles = vehicles.map((vehicle)=>({
+            ...vehicle,
+            mots: JSON.parse(vehicle.mots).filter((mot)=>mot !== false
+            )
+        })
+    );
+    const { completeScrappedValue , numberOfScrapped  } = generateScrapped(cleanedMotVehicles);
+    const collectMotsScoresByYear = generateMotScoresByYear(response.motTests);
+    const motYears = collectMotsScoresByYear.map((mot)=>mot.completedDate
+    );
+    const collection = generateAverageMots(motYears, cleanedMotVehicles);
+    let avgScoreCounter = 0;
+    collection.map((mot)=>avgScoreCounter += mot.score
+    );
+    const props = {
+        vehicleString: {
+            ...response,
+            motChartTests: collectMotsScoresByYear
+        },
+        averageVehicle: {
+            averageMots: collection,
+            avgScore: parseFloat((avgScoreCounter / collection.length).toFixed(2)),
+            avgScrapped: completeScrappedValue.toFixed(0),
+            numberOfScrapped
+        }
+    };
+    return res.json({
+        message: JSON.parse(JSON.stringify(props)),
+        success: true
+    });
+}
 
-/***/ }),
-
-/***/ "./services/newMongo.js":
-/*!******************************!*\
-  !*** ./services/newMongo.js ***!
-  \******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var mongodb__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongodb */ \"mongodb\");\n/* harmony import */ var mongodb__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongodb__WEBPACK_IMPORTED_MODULE_0__);\n\nconst MONGODB_URI = \"mongodb+srv://james:Jamied123@cars.natt5.mongodb.net/cars?retryWrites=true&w=majority\";\nconst MONGODB_DB = \"cars\";\n// check the MongoDB URI\nif (!MONGODB_URI) {\n    throw new Error(\"Define the MONGODB_URI environmental variable\");\n}\n// check the MongoDB DB\nif (!MONGODB_DB) {\n    throw new Error(\"Define the MONGODB_DB environmental variable\");\n}\nlet cachedClient = null;\nlet cachedDb = null;\nasync function connectToDatabase() {\n    // check the cached.\n    if (cachedClient && cachedDb) {\n        // load from cache\n        return {\n            client: cachedClient,\n            db: cachedDb\n        };\n    }\n    // set the connection options\n    const opts = {\n        useNewUrlParser: true,\n        useUnifiedTopology: true\n    };\n    // Connect to cluster\n    let client = new mongodb__WEBPACK_IMPORTED_MODULE_0__.MongoClient(MONGODB_URI, opts);\n    await client.connect();\n    let db = client.db(MONGODB_DB);\n    // set cache\n    cachedClient = client;\n    cachedDb = db;\n    return {\n        client: cachedClient,\n        db: cachedDb\n    };\n}\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (connectToDatabase);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zZXJ2aWNlcy9uZXdNb25nby5qcy5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7QUFBcUM7QUFFckMsS0FBSyxDQUFDQyxXQUFXLEdBQ2YsQ0FBdUY7QUFDekYsS0FBSyxDQUFDQyxVQUFVLEdBQUcsQ0FBTTtBQUV6QixFQUF3QjtBQUN4QixFQUFFLEdBQUdELFdBQVcsRUFBRSxDQUFDO0lBQ2pCLEtBQUssQ0FBQyxHQUFHLENBQUNFLEtBQUssQ0FBQyxDQUErQztBQUNqRSxDQUFDO0FBRUQsRUFBdUI7QUFDdkIsRUFBRSxHQUFHRCxVQUFVLEVBQUUsQ0FBQztJQUNoQixLQUFLLENBQUMsR0FBRyxDQUFDQyxLQUFLLENBQUMsQ0FBOEM7QUFDaEUsQ0FBQztBQUVELEdBQUcsQ0FBQ0MsWUFBWSxHQUFHLElBQUk7QUFDdkIsR0FBRyxDQUFDQyxRQUFRLEdBQUcsSUFBSTtlQUVKQyxpQkFBaUIsR0FBRyxDQUFDO0lBQ2xDLEVBQW9CO0lBQ3BCLEVBQUUsRUFBRUYsWUFBWSxJQUFJQyxRQUFRLEVBQUUsQ0FBQztRQUM3QixFQUFrQjtRQUNsQixNQUFNLENBQUMsQ0FBQztZQUNORSxNQUFNLEVBQUVILFlBQVk7WUFDcEJJLEVBQUUsRUFBRUgsUUFBUTtRQUNkLENBQUM7SUFDSCxDQUFDO0lBRUQsRUFBNkI7SUFDN0IsS0FBSyxDQUFDSSxJQUFJLEdBQUcsQ0FBQztRQUNaQyxlQUFlLEVBQUUsSUFBSTtRQUNyQkMsa0JBQWtCLEVBQUUsSUFBSTtJQUMxQixDQUFDO0lBRUQsRUFBcUI7SUFDckIsR0FBRyxDQUFDSixNQUFNLEdBQUcsR0FBRyxDQUFDUCxnREFBVyxDQUFDQyxXQUFXLEVBQUVRLElBQUk7SUFDOUMsS0FBSyxDQUFDRixNQUFNLENBQUNLLE9BQU87SUFDcEIsR0FBRyxDQUFDSixFQUFFLEdBQUdELE1BQU0sQ0FBQ0MsRUFBRSxDQUFDTixVQUFVO0lBRTdCLEVBQVk7SUFDWkUsWUFBWSxHQUFHRyxNQUFNO0lBQ3JCRixRQUFRLEdBQUdHLEVBQUU7SUFFYixNQUFNLENBQUMsQ0FBQztRQUNORCxNQUFNLEVBQUVILFlBQVk7UUFDcEJJLEVBQUUsRUFBRUgsUUFBUTtJQUNkLENBQUM7QUFDSCxDQUFDO0FBRUQsaUVBQWVDLGlCQUFpQixFQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vd2VzY29yZWFueWNhci8uL3NlcnZpY2VzL25ld01vbmdvLmpzP2U3MTAiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgTW9uZ29DbGllbnQgfSBmcm9tIFwibW9uZ29kYlwiO1xuXG5jb25zdCBNT05HT0RCX1VSSSA9XG4gIFwibW9uZ29kYitzcnY6Ly9qYW1lczpKYW1pZWQxMjNAY2Fycy5uYXR0NS5tb25nb2RiLm5ldC9jYXJzP3JldHJ5V3JpdGVzPXRydWUmdz1tYWpvcml0eVwiO1xuY29uc3QgTU9OR09EQl9EQiA9IFwiY2Fyc1wiO1xuXG4vLyBjaGVjayB0aGUgTW9uZ29EQiBVUklcbmlmICghTU9OR09EQl9VUkkpIHtcbiAgdGhyb3cgbmV3IEVycm9yKFwiRGVmaW5lIHRoZSBNT05HT0RCX1VSSSBlbnZpcm9ubWVudGFsIHZhcmlhYmxlXCIpO1xufVxuXG4vLyBjaGVjayB0aGUgTW9uZ29EQiBEQlxuaWYgKCFNT05HT0RCX0RCKSB7XG4gIHRocm93IG5ldyBFcnJvcihcIkRlZmluZSB0aGUgTU9OR09EQl9EQiBlbnZpcm9ubWVudGFsIHZhcmlhYmxlXCIpO1xufVxuXG5sZXQgY2FjaGVkQ2xpZW50ID0gbnVsbDtcbmxldCBjYWNoZWREYiA9IG51bGw7XG5cbmFzeW5jIGZ1bmN0aW9uIGNvbm5lY3RUb0RhdGFiYXNlKCkge1xuICAvLyBjaGVjayB0aGUgY2FjaGVkLlxuICBpZiAoY2FjaGVkQ2xpZW50ICYmIGNhY2hlZERiKSB7XG4gICAgLy8gbG9hZCBmcm9tIGNhY2hlXG4gICAgcmV0dXJuIHtcbiAgICAgIGNsaWVudDogY2FjaGVkQ2xpZW50LFxuICAgICAgZGI6IGNhY2hlZERiLFxuICAgIH07XG4gIH1cblxuICAvLyBzZXQgdGhlIGNvbm5lY3Rpb24gb3B0aW9uc1xuICBjb25zdCBvcHRzID0ge1xuICAgIHVzZU5ld1VybFBhcnNlcjogdHJ1ZSxcbiAgICB1c2VVbmlmaWVkVG9wb2xvZ3k6IHRydWUsXG4gIH07XG5cbiAgLy8gQ29ubmVjdCB0byBjbHVzdGVyXG4gIGxldCBjbGllbnQgPSBuZXcgTW9uZ29DbGllbnQoTU9OR09EQl9VUkksIG9wdHMpO1xuICBhd2FpdCBjbGllbnQuY29ubmVjdCgpO1xuICBsZXQgZGIgPSBjbGllbnQuZGIoTU9OR09EQl9EQik7XG5cbiAgLy8gc2V0IGNhY2hlXG4gIGNhY2hlZENsaWVudCA9IGNsaWVudDtcbiAgY2FjaGVkRGIgPSBkYjtcblxuICByZXR1cm4ge1xuICAgIGNsaWVudDogY2FjaGVkQ2xpZW50LFxuICAgIGRiOiBjYWNoZWREYixcbiAgfTtcbn1cblxuZXhwb3J0IGRlZmF1bHQgY29ubmVjdFRvRGF0YWJhc2U7XG4iXSwibmFtZXMiOlsiTW9uZ29DbGllbnQiLCJNT05HT0RCX1VSSSIsIk1PTkdPREJfREIiLCJFcnJvciIsImNhY2hlZENsaWVudCIsImNhY2hlZERiIiwiY29ubmVjdFRvRGF0YWJhc2UiLCJjbGllbnQiLCJkYiIsIm9wdHMiLCJ1c2VOZXdVcmxQYXJzZXIiLCJ1c2VVbmlmaWVkVG9wb2xvZ3kiLCJjb25uZWN0Il0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./services/newMongo.js\n");
-
-/***/ }),
-
-/***/ "./services/taxApi.ts":
-/*!****************************!*\
-  !*** ./services/taxApi.ts ***!
-  \****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"taxApi\": () => (/* binding */ taxApi)\n/* harmony export */ });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"axios\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);\n\nconst TOKEN = \"zwG0SnyNMl95KkE4lyd4A6zblMKRKknr3HinEpnP\";\nconst ADDRESS = \"https://driver-vehicle-licensing.api.gov.uk/vehicle-enquiry/v1/vehicles\";\nconst HEADERS = {\n    headers: {\n        \"x-api-key\": TOKEN,\n        Accept: \"application/json\",\n        \"Content-Type\": \"applicaiton/json\"\n    }\n};\nconst taxApi = async (registrationNumber)=>{\n    try {\n        const { data  } = await axios__WEBPACK_IMPORTED_MODULE_0___default().post(ADDRESS, {\n            registrationNumber\n        }, HEADERS);\n        return data;\n    } catch (err) {}\n};\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zZXJ2aWNlcy90YXhBcGkudHMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBQXlCO0FBRXpCLEtBQUssQ0FBQ0MsS0FBSyxHQUFHLENBQTBDO0FBQ3hELEtBQUssQ0FBQ0MsT0FBTyxHQUNYLENBQXlFO0FBQzNFLEtBQUssQ0FBQ0MsT0FBTyxHQUFHLENBQUM7SUFDZkMsT0FBTyxFQUFFLENBQUM7UUFDUixDQUFXLFlBQUVILEtBQUs7UUFDbEJJLE1BQU0sRUFBRSxDQUFrQjtRQUMxQixDQUFjLGVBQUUsQ0FBa0I7SUFDcEMsQ0FBQztBQUNILENBQUM7QUFFTSxLQUFLLENBQUNDLE1BQU0sVUFBVUMsa0JBQTBCLEdBQUssQ0FBQztJQUMzRCxHQUFHLENBQUMsQ0FBQztRQUNILEtBQUssQ0FBQyxDQUFDLENBQUNDLElBQUksRUFBQyxDQUFDLEdBQUcsS0FBSyxDQUFDUixpREFBVSxDQUFDRSxPQUFPLEVBQUUsQ0FBQztZQUFDSyxrQkFBa0I7UUFBQyxDQUFDLEVBQUVKLE9BQU87UUFDMUUsTUFBTSxDQUFDSyxJQUFJO0lBQ2IsQ0FBQyxDQUFDLEtBQUssRUFBRUUsR0FBRyxFQUFFLENBQUMsQ0FBQztBQUNsQixDQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vd2VzY29yZWFueWNhci8uL3NlcnZpY2VzL3RheEFwaS50cz9kNTE1Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBheGlvcyBmcm9tIFwiYXhpb3NcIjtcblxuY29uc3QgVE9LRU4gPSBcInp3RzBTbnlOTWw5NUtrRTRseWQ0QTZ6YmxNS1JLa25yM0hpbkVwblBcIjtcbmNvbnN0IEFERFJFU1MgPVxuICBcImh0dHBzOi8vZHJpdmVyLXZlaGljbGUtbGljZW5zaW5nLmFwaS5nb3YudWsvdmVoaWNsZS1lbnF1aXJ5L3YxL3ZlaGljbGVzXCI7XG5jb25zdCBIRUFERVJTID0ge1xuICBoZWFkZXJzOiB7XG4gICAgXCJ4LWFwaS1rZXlcIjogVE9LRU4sXG4gICAgQWNjZXB0OiBcImFwcGxpY2F0aW9uL2pzb25cIixcbiAgICBcIkNvbnRlbnQtVHlwZVwiOiBcImFwcGxpY2FpdG9uL2pzb25cIixcbiAgfSxcbn07XG5cbmV4cG9ydCBjb25zdCB0YXhBcGkgPSBhc3luYyAocmVnaXN0cmF0aW9uTnVtYmVyOiBzdHJpbmcpID0+IHtcbiAgdHJ5IHtcbiAgICBjb25zdCB7IGRhdGEgfSA9IGF3YWl0IGF4aW9zLnBvc3QoQUREUkVTUywgeyByZWdpc3RyYXRpb25OdW1iZXIgfSwgSEVBREVSUyk7XG4gICAgcmV0dXJuIGRhdGE7XG4gIH0gY2F0Y2ggKGVycikge31cbn07XG4iXSwibmFtZXMiOlsiYXhpb3MiLCJUT0tFTiIsIkFERFJFU1MiLCJIRUFERVJTIiwiaGVhZGVycyIsIkFjY2VwdCIsInRheEFwaSIsInJlZ2lzdHJhdGlvbk51bWJlciIsImRhdGEiLCJwb3N0IiwiZXJyIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./services/taxApi.ts\n");
 
 /***/ })
 
@@ -80,7 +158,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = (__webpack_exec__("./pages/api/vehicles/[registration].js"));
+var __webpack_exports__ = __webpack_require__.X(0, [244,356], () => (__webpack_exec__(2325)));
 module.exports = __webpack_exports__;
 
 })();
