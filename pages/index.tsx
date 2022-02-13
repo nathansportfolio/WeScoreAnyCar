@@ -54,12 +54,12 @@ const Home: React.FC<HomeProps> = () => {
   return (
     <>
       <Head>
-        <title>WeScoreAnyCar</title>
+        <title>WeScoreAnyCar | The Free Credit Score For Your Car</title>
 
         <meta property="og:title" content="WeScoreAnyCar" key="home" />
         <meta
           name="description"
-          content="Score your vehicle, and find out how your car compares to others. It's like a credit score for your car."
+          content="Score your vehicle, and find out how your car compares to others. It's like a credit score for your car. The UK's greatest car buying assistant"
         />
       </Head>
     <div className="mountain-background">
