@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import { useRouter } from "next/router";
 import { MainContext } from "../context/context";
 import Spinner from "../components/Spinner";
+import Head from "next/head";
 // import {event} from '../services/ga';
 
 const style: any = {
@@ -51,6 +52,16 @@ const Home: React.FC<HomeProps> = () => {
   };
 
   return (
+    <>
+      <Head>
+        <title>WeScoreAnyCar</title>
+
+        <meta property="og:title" content="WeScoreAnyCar" key="home" />
+        <meta
+          name="description"
+          content="Score your vehicle, and find out how your car compares to others. It's like a credit score for your car."
+        />
+      </Head>
     <div className="mountain-background">
       <div className="mountain-filter">
         {loading && <Spinner />}
@@ -155,6 +166,7 @@ const Home: React.FC<HomeProps> = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
