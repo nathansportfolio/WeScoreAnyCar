@@ -3,7 +3,6 @@ import MileageScore from "../../components/MileageDisplay";
 import LoadingButton from "@mui/lab/LoadingButton";
 import LineChart from "../../components/LineChart";
 import MotAccordion from "../../components/Accordion";
-import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useContext } from "react";
 import { MainContext } from "../../context/context";
@@ -33,57 +32,56 @@ const style = {
 };
 
 interface ScoreProps {
-  vehicleString: any;
-  averageVehicle: any;
+
 }
 
-const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
+const Score: React.FC<ScoreProps> = () => {
   const router = useRouter();
   const { setError, setLoading, savedToggle, user } = useContext(MainContext);
-  const {
-    registration,
-    engineSize,
-    fuelType,
-    make,
-    model,
-    motTests,
-    primaryColour,
-    firstUsedDate,
-    motChartTests,
-    score,
-    taxStatus,
-    taxDueDate,
-    revenueWeight,
-    wheelplan,
-    dateOfLastV5CIssued,
-    co2Emissions,
-  } = vehicleString;
+  // const {
+  //   'BD63 SOE',
+  //   1200,
+  //   'Petrol',
+  //   'Audi',
+  //   model,
+  //   motTests,
+  //   'White',
+  //   firstUsedDate,
+  //   motChartTests,
+  //   score,
+  //   'taxed',
+  //   '11/12/2024',
+  //   revenueWeight,
+  //   wheelplan,
+  //   dateOfLastV5CIssued,
+  //   co2Emissions,
+  // } = vehicleString;
 
-  const { averageMots, avgScore, avgScrapped, numberOfScrapped } =
-    averageVehicle;
+  // const { averageMots, avgScore, avgScrapped, numberOfScrapped } =
+  //   averageVehicle;
 
   const firstCard = {
     icon: "fas fa-car",
     firstCol: [
-      { title: "Registration", value: registration },
-      { title: "Make", value: make },
-      { title: "Model", value: model },
+      { title: "Registration", value: 'BD63 SOE' },
+      { title: "Make", value: 'Audi' },
+      { title: "Model", value: 'A3' },
     ],
     secondCol: [
-      { title: "Fuel", value: fuelType },
-      { title: "Colour", value: primaryColour },
-      { title: "Engine", value: engineSize },
+      { title: "Fuel", value: 'Petrol' },
+      { title: "Colour", value: 'White' },
+      { title: "Engine", value: 1200 },
     ],
   };
 
   const secondCard = {
     icon: "fas fa-car",
     firstCol: [
-      { title: "Taxed Status", value: taxStatus },
-      { title: "Tax Due Date", value: taxDueDate },
+      { title: "Taxed Status", value: 'taxed' },
+      { title: "Tax Due Date", value: '11/12/2024' },
     ],
     secondCol: [
-      { title: "Emissions", value: co2Emissions+' (co2)'},
+      { title: "Emissions", value: 19+' (co2)'},
       { title: "Tax Code", value: "12W" },
     ],
   };
@@ -91,18 +89,21 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
   const thirdCard = {
     icon: "fas fa-car",
     firstCol: [
-      { title: "Weight", value: revenueWeight + "kg" },
-      { title: "Last V5 generated", value: dateOfLastV5CIssued },
+      { title: "Weight", value: 1000 + "kg" },
+      { title: "Last V5 generated", value: '11/12/2025' },
     ],
     secondCol: [
-      { title: "Wheel Base", value: wheelplan },
+      { title: "Wheel Base", value: '4 wheel base' },
     ],
   };
 
   useEffect(() => {
-    if (!registration) {
-      setLoading(false);
+    if (!'BD63 SOE') {
+      setTimeout(() => {
+  setLoading(false);
       setError(true);
+      }, 2000)
+    
       router.push("/");
     }
   }, []);
@@ -158,7 +159,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
   return (
     <div>
       <Head>
-        <title>WeScoreAnyCar - {registration}</title>
+        <title>WeScoreAnyCar - {'BD63 SOE'}</title>
         <meta property="og:title" content="WeScoreAnyCar - Score" key="score" />
         <meta
           name="description"
@@ -176,24 +177,24 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
                     <div style={{ justifyContent: "center", display: "flex" }}>
                       <ScoreGauge
                         duration={1}
-                        average={avgScore}
-                        percentage={score}
+                        average={2}
+                        percentage={1}
                         header="Your score"
                         subHeader=""
                       />
                     </div>
                   </div>
                   <MileageScore
-                    mileage={avgScrapped}
-                    numberOfScrapped={numberOfScrapped}
+                    mileage={104000}
+                    numberOfScrapped={8300}
                   />
                 </div>
               </div>
             </div>
             <div className="score-container-chunk">
               <h2 className="score-headers" style={style.header}>
-                {make} {model}{" "}
-                <div className="inline-block text-light">{registration}</div>
+                {'Audi'} {'A3'}{" "}
+                <div className="inline-block text-light">{'BD63 SOE'}</div>
               </h2>
               <div className="score-card-container">
                 {CarDetailsCard(firstCard)}
@@ -205,7 +206,7 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
               {" "}
               How is your car doing?{" "}
             </h2>
-            {motTests.length > 1 && (
+            {/* {motTests.length > 1 && (
               <div className="mot-container">
                 <h3 className="text-centered">Last 5 year MOT scores</h3>
 
@@ -220,18 +221,18 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
                   <p style={{ color: "black" }}>-Average Score-</p>
                 </div>
               </div>
-            )}
+            )} */}
             <div className="mot-container">
               <h2>Your MOT History</h2>
-              <div className="mot-entry-container">
+              {/* <div className="mot-entry-container">
                 <MotAccordion mots={motTests} />
-              </div>
+              </div> */}
             </div>
             <div className="know-car-container">
               <p>Know your car, save this information</p>
               <LoadingButton
                 variant="contained"
-                onClick={() => savedToggle({ vehicleString, averageVehicle })}
+    
               >
                 {" "}
                 Save car
@@ -244,23 +245,23 @@ const Score: React.FC<ScoreProps> = ({ vehicleString, averageVehicle }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  if (params) {
-    if (params.id) {
-      const STAGING = false
-      let response = await fetch(
-        STAGING ? "http://localhost:3000/api/vehicles/" + params.id.toString() : "https://we-score-any-car-gageclgar-nathansportfolio.vercel.app/api/vehicles/" + params.id.toString(),
-        {
-          method: "GET",
-        }
-      );
+// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+//   if (params) {
+//     if (params.id) {
+//       const STAGING = false
+//       let response = await fetch(
+//         STAGING ? "http://localhost:3000/api/vehicles/" + params.id.toString() : "https://we-score-any-car-gageclgar-nathansportfolio.vercel.app/api/vehicles/" + params.id.toString(),
+//         {
+//           method: "GET",
+//         }
+//       );
         
-      const { message } = await response.json();
+//       const { message } = await response.json();
 
-      return { props: message };
-    }
-  }
-  throw new Error("Required parameters not provided");
-};
+//       return { props: message };
+//     }
+//   }
+//   throw new Error("Required parameters not provided");
+// };
 
 export default Score;
